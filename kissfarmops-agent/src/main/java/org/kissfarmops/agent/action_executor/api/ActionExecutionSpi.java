@@ -11,7 +11,9 @@ public interface ActionExecutionSpi {
 	String getName();
 
 	/**
-	 * @return Unique identifier of this execution (unique throughout the system)
+	 * @return Id of the action execution. It could be just 1 execution for
+	 *         particular prototype. Or it can be take the meaning of correlationId
+	 *         if action executed on many prototypes across multiple nodes
 	 */
 	String getExecutionId();
 
@@ -36,21 +38,19 @@ public interface ActionExecutionSpi {
 	String getOutput();
 
 	/**
-	 * @return true if termination succeeded or action wasn't running. False
-	 *         otherwise.
 	 */
-	boolean terminate();
+	void terminate();
 
 	/**
 	 * Stop working on this action as soon as possible and prepare for
 	 * reconciliation and resume later.
 	 * 
 	 * This is NON_BLOCKING method. It will instruct action to suspend but will not
-	 * interrupt or interrupt current process if any. You should listen to callback
-	 * invocations of {@link ActionsExecutionListener} for status change
+	 * interrupt current process if any. You should listen to callback invocations
+	 * of {@link ActionsExecutionListener} for status change
 	 * 
 	 * This method supposed to be called when agent received termination signal and
-	 * we need to wrap ASAP, but we need to avoid loosing any current progress.
+	 * we need to wrap up ASAP, but we need to avoid loosing any current progress.
 	 * 
 	 * For sync action it means report will be sent to the controller after
 	 * reconciliation.

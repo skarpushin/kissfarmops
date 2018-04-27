@@ -24,7 +24,7 @@ import org.kissfarmops.agent.process_execution.api.ProcessExecution;
 import org.kissfarmops.agent.process_execution.api.ProcessExecutionCallback;
 import org.kissfarmops.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarmops.agent.serializer.api.DtoSerializer;
-import org.kissfarmops.shared.api.ActionCommands;
+import org.kissfarmops.shared.actions.api.ActionCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,10 +178,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		ret.validateAndSetActionInvocationInfo(invocationInfo);
 		dtoSerializer.save(invocationInfo, ret.getInvocationInfoFile());
 
-		if (!ret.setResumeMethod(new StartPostponedActionDeferedHandler(), "PostponedAction")) {
-			throw new RuntimeException("Failed to postpone an action");
-		}
-
+		ret.setResumeMethodUnsafe(new StartPostponedActionDeferedHandler(), "PostponedAction");
 		ret.setActionStatus(ActionStatus.Postponed);
 		return ret;
 	}
@@ -319,7 +316,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 	};
 
-	private Runnable invocationWatchdogSuspending = new Runnable() {
+	protected Runnable invocationWatchdogSuspending = new Runnable() {
 		@Override
 		public void run() {
 			synchronized (lifecycleSync) {
@@ -385,7 +382,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 	};
 
-	private ProcessExecutionCallback invocationCallbackSuspending = new ProcessExecutionCallback() {
+	protected ProcessExecutionCallback invocationCallbackSuspending = new ProcessExecutionCallback() {
 		@Override
 		public void onProcessFinished(int exitCode) {
 			synchronized (lifecycleSync) {
@@ -465,6 +462,8 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 					return;
 				}
 
+				// TODO: Put a comment here, explaining WHY we doing this thing here with
+				// statusCheckScheduledFuture
 				if (statusCheckScheduledFuture == null) {
 					return;
 				}
@@ -645,16 +644,31 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 	};
 
+	/**
+	 * @return true if ok, false if exception. This method is used when we got
+	 *         called via callback from downstream components and there is no reason
+	 *         to propagate exceptions. Use
+	 *         {@link #setResumeMethodUnsafe(ResumeMethod, String)} if exception
+	 *         propagation is ok
+	 */
 	private boolean setResumeMethod(ResumeMethod resumeMethod, String actionPhase) {
+		try {
+			setResumeMethodUnsafe(resumeMethod, actionPhase);
+			return true;
+		} catch (Throwable t) {
+			this.logExceptionToBoth("Failed to setResumeMethod", t);
+			return false;
+		}
+	}
+
+	private void setResumeMethodUnsafe(ResumeMethod resumeMethod, String actionPhase) {
 		try {
 			dtoSerializer.save(resumeMethod, getFileResumeMethod());
 			FileUtils.write(getFileResumeMethodType(), resumeMethod.getClass().getName(), ENCODING, false);
-			return true;
 		} catch (Throwable t) {
-			this.logExceptionToBoth("Failed to set resume method (to pick up after reconciliation) for action "
-					+ toStringForLog() + " and it's phase " + actionPhase, t);
 			setActionStatus(ActionStatus.Exception);
-			return false;
+			throw new RuntimeException("Failed to set resume method (to pick up after reconciliation) for action "
+					+ toStringForLog() + " and it's phase " + actionPhase, t);
 		}
 	}
 
@@ -711,9 +725,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 					statusCheckScheduledFuture.cancel(true);
 					statusCheckScheduledFuture = null;
 
-					if (!setResumeMethod(new ResumeStatusChecksDeferedHandler(), "ResumeStatusChecks")) {
-						return;
-					}
+					setResumeMethodUnsafe(new ResumeStatusChecksDeferedHandler(), "ResumeStatusChecks");
 					setActionStatus(ActionStatus.Suspended);
 					return;
 				}
@@ -911,22 +923,20 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	}
 
 	@Override
-	public boolean terminate() {
+	public void terminate() {
 		if (actionStatus != ActionStatus.InProgressAsync && actionStatus != ActionStatus.InProgressSync) {
-			return true;
+			return;
 		}
 
 		synchronized (lifecycleSync) {
-			if (!terminateInvocationIfAny() | !terminateStatusCheckIfAny()) {
-				return false;
-			}
+			terminateInvocationIfAny();
+			terminateStatusCheckIfAny();
 		}
 
 		setActionStatus(ActionStatus.Terminated);
-		return true;
 	}
 
-	private boolean terminateStatusCheckIfAny() {
+	private void terminateStatusCheckIfAny() {
 		try {
 			// Cancel wait interval between status checks if any
 			if (statusCheckScheduledFuture != null) {
@@ -943,17 +953,14 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 				statusCheck.terminate();
 				statusCheck = null;
 			}
-
-			return true;
 		} catch (Throwable t) {
-			log.warn("Failed to terminate the action status check: " + toStringForLog(), t);
-			return false;
+			throw new RuntimeException("Failed to terminate the action status check: " + toStringForLog(), t);
 		}
 	}
 
-	private boolean terminateInvocationIfAny() {
+	private void terminateInvocationIfAny() {
 		if (invocationWatchdogFuture == null) {
-			return true;
+			return;
 		}
 
 		try {
@@ -962,11 +969,8 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 
 			invocation.terminate();
 			invocation = null;
-
-			return true;
 		} catch (Throwable t) {
-			log.warn("Failed to terminate the action invocation: " + toStringForLog(), t);
-			return false;
+			throw new RuntimeException("Failed to terminate the action invocation: " + toStringForLog(), t);
 		}
 	}
 

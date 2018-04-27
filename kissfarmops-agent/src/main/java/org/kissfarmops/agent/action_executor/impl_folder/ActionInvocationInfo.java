@@ -3,7 +3,7 @@ package org.kissfarmops.agent.action_executor.impl_folder;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.kissfarmops.shared.api.ActionCommands;
+import org.kissfarmops.shared.actions.api.ActionCommands;
 
 public class ActionInvocationInfo implements Serializable {
 	private static final long serialVersionUID = 1040465252595270960L;

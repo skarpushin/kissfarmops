@@ -28,7 +28,7 @@ import org.kissfarmops.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarmops.agent.process_execution.impl.ProcessExecutorFactoryImpl;
 import org.kissfarmops.agent.serializer.api.DtoSerializer;
 import org.kissfarmops.agent.serializer.impl.DtoSerializerGsonImpl;
-import org.kissfarmops.shared.api.ActionCommands;
+import org.kissfarmops.shared.actions.api.ActionCommands;
 import org.kissfarmops.shared.api.IdTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
