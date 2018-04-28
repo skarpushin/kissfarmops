@@ -2,23 +2,19 @@ package org.kissfarmops.agent.application.impl;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.io.FileUtils;
+import org.kissfarmops.agent.action_executor.api.ActionExecutionFactory;
 import org.kissfarmops.agent.action_executor.api.ActionExecutionSpi;
 import org.kissfarmops.agent.action_executor.api.ActionStatus;
 import org.kissfarmops.agent.action_executor.api.ActionsExecutionListener;
-import org.kissfarmops.agent.action_executor.impl_folder.ActionExecutionSpiImpl;
 import org.kissfarmops.agent.action_executor.impl_folder.ActionInvocationInfo;
 import org.kissfarmops.agent.application.api.ActionFoldersResolver;
 import org.kissfarmops.agent.application.api.AppInstanceSpi;
 import org.kissfarmops.agent.application.api.AppListener;
-import org.kissfarmops.agent.process_execution.api.ProcessExecutorFactory;
-import org.kissfarmops.agent.serializer.api.DtoSerializer;
 import org.kissfarmops.agent.utils.StringUtils;
 import org.kissfarmops.shared.config.api.ActionConfig;
 import org.kissfarmops.shared.config.api.AppDefinitionConfig;
@@ -42,18 +38,12 @@ import com.google.common.base.Preconditions;
 public class AppInstanceSpiImpl implements AppInstanceSpi {
 	private static Logger log = LoggerFactory.getLogger(AppInstanceSpiImpl.class);
 
-	private static final List<ActionStatus> statusesWhenActionCompleted = Arrays.asList(ActionStatus.Success,
-			ActionStatus.Failed, ActionStatus.Exception, ActionStatus.Timedout, ActionStatus.Terminated,
-			ActionStatus.Suspended);
-
 	private String version;
 	private AppDefinitionConfig definitionConfig;
 	private AppPrototypeConfig prototypeConfig;
 	private ActionFoldersResolver actionFoldersResolver;
-	private ScheduledExecutorService executorService;
 	private AppListener appListener;
-	private ProcessExecutorFactory processExecutorFactory;
-	private DtoSerializer dtoSerializer;
+	private ActionExecutionFactory actionExecutionFactory;
 
 	private Object syncRoot = new Object();
 	private List<ActionExecutionSpi> actionExecutions = new ArrayList<>();
@@ -62,25 +52,20 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 
 	public AppInstanceSpiImpl(String version, AppDefinitionConfig definitionConfig, AppPrototypeConfig prototypeConfig,
 			AppListener appListener, ActionFoldersResolver actionFoldersResolver,
-			ScheduledExecutorService executorService, ProcessExecutorFactory processExecutorFactory,
-			DtoSerializer dtoSerializer) {
+			ActionExecutionFactory actionExecutionFactory) {
+		this.actionExecutionFactory = actionExecutionFactory;
 		Preconditions.checkArgument(StringUtils.hasText(version), "version must not be empty");
 		Preconditions.checkArgument(definitionConfig != null, "definitionConfig must not be null");
 		Preconditions.checkArgument(prototypeConfig != null, "prototypeConfig must not be null");
 		Preconditions.checkArgument(appListener != null, "appListener must not be null");
 		Preconditions.checkArgument(actionFoldersResolver != null, "actionFoldersResolver must not be null");
-		Preconditions.checkArgument(executorService != null, "executorService must not be null");
-		Preconditions.checkArgument(processExecutorFactory != null, "processExecutorFactory must not be null");
-		Preconditions.checkArgument(dtoSerializer != null, "dtoSerializer must not be null");
+		Preconditions.checkArgument(actionExecutionFactory != null, "actionExecutionFactory must not be null");
 
 		this.version = version;
 		this.definitionConfig = definitionConfig;
 		this.prototypeConfig = prototypeConfig;
 		this.actionFoldersResolver = actionFoldersResolver;
-		this.executorService = executorService;
 		this.appListener = appListener;
-		this.processExecutorFactory = processExecutorFactory;
-		this.dtoSerializer = dtoSerializer;
 
 		reconcileActionsIfAny();
 	}
@@ -104,8 +89,8 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 
 			try {
 				synchronized (syncRoot) {
-					ActionExecutionSpiImpl executionSpi = ActionExecutionSpiImpl.reconcileExistingAction(actionFolder,
-							dtoSerializer, executorService, processExecutorFactory, actionsExecutionListener);
+					ActionExecutionSpi executionSpi = actionExecutionFactory.reconcileExistingAction(actionFolder,
+							actionsExecutionListener);
 					actionExecutions.add(executionSpi);
 				}
 			} catch (Throwable t) {
@@ -130,7 +115,7 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 					// upstream
 				}
 
-				if (statusesWhenActionCompleted.contains(newStatus)) {
+				if (ActionExecutionSpi.statusesWhenActionCompleted.contains(newStatus)) {
 					actionExecutions.remove(actionExecutionSpi);
 					cleanUpInstanceFolder(actionExecutionSpi);
 					notifyCallbacksIfAny();
@@ -198,12 +183,12 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 					invocationInfo.getInstanceFolder());
 
 			if (suspending) {
-				return ActionExecutionSpiImpl.postponeAction(invocationInfo, dtoSerializer, actionsExecutionListener);
+				return actionExecutionFactory.postponeAction(invocationInfo, actionsExecutionListener);
 			}
 
 			synchronized (syncRoot) {
-				ActionExecutionSpiImpl newActionExecution = ActionExecutionSpiImpl.startNewInvocation(invocationInfo,
-						dtoSerializer, executorService, processExecutorFactory, actionsExecutionListener);
+				ActionExecutionSpi newActionExecution = actionExecutionFactory.startNewInvocation(invocationInfo,
+						actionsExecutionListener);
 				actionExecutions.add(newActionExecution);
 				return newActionExecution;
 			}

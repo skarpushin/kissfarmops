@@ -21,9 +21,6 @@ import org.junit.Test;
 import org.kissfarmops.agent.action_executor.api.ActionExecutionSpi;
 import org.kissfarmops.agent.action_executor.api.ActionStatus;
 import org.kissfarmops.agent.action_executor.api.ActionsExecutionListener;
-import org.kissfarmops.agent.action_executor.impl_folder.ActionExecutionSpiImpl;
-import org.kissfarmops.agent.action_executor.impl_folder.ActionInvocationInfo;
-import org.kissfarmops.agent.action_executor.impl_folder.ActionsExecutionListenerLoggingImpl;
 import org.kissfarmops.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarmops.agent.process_execution.impl.ProcessExecutorFactoryImpl;
 import org.kissfarmops.agent.serializer.api.DtoSerializer;
@@ -77,8 +74,8 @@ public class ActionExecutionSpiImplTest {
 				actionCommands, instanceFolder.getAbsolutePath(), envVars);
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Success) {
@@ -110,7 +107,7 @@ public class ActionExecutionSpiImplTest {
 		assertEquals(ActionStatus.Postponed, postponed.getStatus());
 
 		// === Reconcile
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.reconcileExistingAction(instanceFolder.getAbsolutePath(),
+		ActionExecutionSpi f = ActionExecutionSpiImpl.reconcileExistingAction(instanceFolder.getAbsolutePath(),
 				dtoSerializer, executorService, processExecutorFactory, actionsExecutionListener);
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Success) {
@@ -139,8 +136,8 @@ public class ActionExecutionSpiImplTest {
 				actionCommands, instanceFolder.getAbsolutePath(), envVars);
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Success) {
@@ -182,7 +179,7 @@ public class ActionExecutionSpiImplTest {
 		assertEquals(ActionStatus.Suspended, suspended.getStatus());
 
 		// === Reconcile
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.reconcileExistingAction(instanceFolder.getAbsolutePath(),
+		ActionExecutionSpi f = ActionExecutionSpiImpl.reconcileExistingAction(instanceFolder.getAbsolutePath(),
 				dtoSerializer, executorService, processExecutorFactory, actionsExecutionListener);
 
 		now = System.currentTimeMillis();
@@ -210,8 +207,8 @@ public class ActionExecutionSpiImplTest {
 				actionCommands, instanceFolder.getAbsolutePath(), envVars);
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Success) {
@@ -239,8 +236,8 @@ public class ActionExecutionSpiImplTest {
 				scriptsFolder, actionCommands, instanceFolder.getAbsolutePath(), new HashMap<>());
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Exception) {
@@ -270,8 +267,8 @@ public class ActionExecutionSpiImplTest {
 				scriptsFolder, actionCommands, instanceFolder.getAbsolutePath(), new HashMap<>());
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Exception) {
@@ -299,8 +296,8 @@ public class ActionExecutionSpiImplTest {
 				scriptsFolder, actionCommands, instanceFolder.getAbsolutePath(), new HashMap<>());
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Timedout) {
@@ -326,8 +323,8 @@ public class ActionExecutionSpiImplTest {
 				scriptsFolder, actionCommands, instanceFolder.getAbsolutePath(), new HashMap<>());
 
 		ActionsExecutionListener actionsExecutionListener = new ActionsExecutionListenerLoggingImpl();
-		ActionExecutionSpiImpl f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer,
-				executorService, processExecutorFactory, actionsExecutionListener);
+		ActionExecutionSpi f = ActionExecutionSpiImpl.startNewInvocation(invocationInfo, dtoSerializer, executorService,
+				processExecutorFactory, actionsExecutionListener);
 
 		long now = System.currentTimeMillis();
 		while (System.currentTimeMillis() - now < 2000 && f.getStatus() != ActionStatus.Timedout) {

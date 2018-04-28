@@ -1,5 +1,8 @@
 package org.kissfarmops.agent.action_executor.api;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Interface to control and get info about action execution that was already
  * started
@@ -8,6 +11,9 @@ package org.kissfarmops.agent.action_executor.api;
  *
  */
 public interface ActionExecutionSpi {
+	public List<ActionStatus> statusesWhenActionCompleted = Arrays.asList(ActionStatus.Success, ActionStatus.Failed,
+			ActionStatus.Exception, ActionStatus.Timedout, ActionStatus.Terminated, ActionStatus.Suspended);
+
 	String getName();
 
 	/**

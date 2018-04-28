@@ -59,9 +59,9 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	private static final String FILE_NAME_RESUME_METHOD_TYPE = "z_resume-method-type";
 	private static final String FILE_NAME_RESUME_METHOD = "z_resume-method";
 
-	private static final String ENV_VAR_INSTANCE_FOLDER = "INSTANCE_FOLDER";
-	private static final String ENV_VAR_FILE_NAME_INVOCATION_INFO = "INVOCATION_INFO";
-	private static final String ENV_VAR_FILE_NAME_RESULT = "RESULT_FILE";
+	public static final String ENV_VAR_INSTANCE_FOLDER = "INSTANCE_FOLDER";
+	public static final String ENV_VAR_FILE_NAME_INVOCATION_INFO = "INVOCATION_INFO";
+	public static final String ENV_VAR_FILE_NAME_RESULT = "RESULT_FILE";
 
 	/**
 	 * Special exit code used to indicate this is an async action and it's result is
@@ -137,7 +137,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	 *            information for action invocation that can be serialized.
 	 *            IMPORTANT: It's assumed that instance folder is created by caller
 	 */
-	public static ActionExecutionSpiImpl startNewInvocation(ActionInvocationInfo invocationInfo,
+	public static ActionExecutionSpi startNewInvocation(ActionInvocationInfo invocationInfo,
 			DtoSerializer dtoSerializer, ScheduledExecutorService executorService,
 			ProcessExecutorFactory processExecutorFactory, ActionsExecutionListener actionsExecutionListener) {
 
@@ -200,19 +200,16 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	}
 
 	private void validateAndSetActionInvocationInfo(ActionInvocationInfo invocationInfo) {
-		Preconditions.checkArgument(invocationInfo.getEnvVars() != null, "EnvVars must not be null");
+		this.invocationInfo = invocationInfo;
 
+		Preconditions.checkArgument(invocationInfo != null, "invocationInfo required");
 		Preconditions.checkArgument(StringUtils.isNotEmpty(invocationInfo.getScriptsFolder()),
 				"scriptsFolder var must not be empty");
 		Preconditions.checkArgument(new File(invocationInfo.getScriptsFolder()).exists(), "scriptsFolder must exist");
-
 		Preconditions.checkArgument(StringUtils.isNotEmpty(invocationInfo.getInstanceFolder()),
 				"instanceFolder var must not be empty");
 		Preconditions.checkArgument(new File(invocationInfo.getInstanceFolder()).exists(), "instanceFolder must exist");
-
 		Preconditions.checkArgument(invocationInfo.getActionCommands() != null, "actionCommands info required");
-
-		this.invocationInfo = invocationInfo;
 	}
 
 	protected void invokeAction(String scriptsFolder, ActionCommands actionCommands,
@@ -232,7 +229,10 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	}
 
 	protected Map<String, String> enrichEnvVarsBeforeScriptExecution() {
-		Map<String, String> enrichedEnvVars = new HashMap<>(invocationInfo.getEnvVars());
+		Map<String, String> enrichedEnvVars = new HashMap<>();
+		if (invocationInfo.getEnvVars() != null) {
+			enrichedEnvVars.putAll(invocationInfo.getEnvVars());
+		}
 		enrichedEnvVars.put(ENV_VAR_INSTANCE_FOLDER, invocationInfo.getInstanceFolder());
 		enrichedEnvVars.put(ENV_VAR_FILE_NAME_INVOCATION_INFO, getInvocationInfoFile().getAbsolutePath());
 		enrichedEnvVars.put(ENV_VAR_FILE_NAME_RESULT, getResultFile().getAbsolutePath());
@@ -864,7 +864,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 
 		try {
-			return FileUtils.readFileToString(getResultFile(), ENCODING);
+			return FileUtils.readFileToString(getResultFile(), ENCODING).trim();
 		} catch (Throwable t) {
 			throw new RuntimeException("Failed to read action result", t);
 		}
@@ -874,7 +874,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 	public String getOutput() {
 		StringWriter tempOutput = outputStringWriter;
 		if (tempOutput != null) {
-			return tempOutput.toString();
+			return tempOutput.toString().trim();
 		}
 
 		if (!getOutputFile().exists()) {
@@ -882,7 +882,7 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 
 		try {
-			return FileUtils.readFileToString(getOutputFile(), ENCODING);
+			return FileUtils.readFileToString(getOutputFile(), ENCODING).trim();
 			// NOTE: Should we read it to output stream as well??? WHat kind of case is
 			// that?
 		} catch (Throwable t) {
@@ -984,7 +984,9 @@ public class ActionExecutionSpiImpl implements ActionExecutionSpi {
 		}
 
 		try {
-			FileUtils.write(getLastStatusFile(), actionStatus.name(), ENCODING, false);
+			if (invocationInfo != null) {
+				FileUtils.write(getLastStatusFile(), actionStatus.name(), ENCODING, false);
+			}
 			// NOTE: It's not really critical to save this because later on it will be
 			// barely used. So it's not completely useless to save it, but it's not
 			// critical. The only case when it will be used is when action will be
