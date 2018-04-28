@@ -1,0 +1,16 @@
+
+<md-input-container>
+	<label><span>{{ ::field.title }}</span><span ng-if="field.isRequired">&nbsp(<span style="color: red">*</span>)</span></label>
+	
+	<md-select name="{{::field.name}}" ng-model="dto[field.name]" has-ve="!!formState.ve[field.name]" ng-readonly="formState.ajax">
+		<md-option ng-repeat="choice in field.choices" value="{{choice.key}}">
+			{{ choice.value }}
+		</md-option>		
+	</md-select>
+	
+	<div class="input-hint" ng-if="field.hint">{{::field.hint}}</div>
+	<div ng-messages="form[field.name].$error" md-auto-hide='false'>
+	    <span ng-message="has-ve">{{ formState.ve[field.name] }}</span>
+	</div>
+</md-input-container>
+

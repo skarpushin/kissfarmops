@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd  
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context.xsd  
+     http://www.springframework.org/schema/mvc
+     http://www.springframework.org/schema/mvc/spring-mvc.xsd
+     http://www.springframework.org/schema/security
+     http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<context:component-scan base-package="org.kissfarm.controller.**.mvc" />
+	<bean class="org.summerb.approaches.jdbccrud.rest.commonpathvars.CommonPathVariableOperationBuilderPlugin" />
+
+	<sec:global-method-security secured-annotations="enabled" authentication-manager-ref="authenticationManager"
+		metadata-source-ref="methodSecurityMetadataSource" proxy-target-class="true" />
+	<context:annotation-config />
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="org.summerb.approaches.jdbccrud.rest.commonpathvars.PathVariablesMapArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<mvc:resources mapping="/static/**" location="classpath:/static/" />
+	<mvc:resources mapping="/webjars/**" location="/webjars/,classpath:/META-INF/resources/webjars/" cache-period="86400" />
+	<mvc:resources mapping="/swagger-ui.html" location="classpath:/META-INF/resources/swagger-ui.html" cache-period="86400" />
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
+
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+		<bean class="org.summerb.approaches.springmvc.utils.ForceLocaleToCoockieUserAwareInterceptor" />
+		<bean class="org.kissfarm.controller.mvc.tools.AllControllerActionsInterceptor" />
+	</mvc:interceptors>
+
+	<bean id="localeResolver" class="org.summerb.approaches.springmvc.utils.LocaleResolverUserBasedImpl" />
+
+	<!-- SECURITY-related -->
+	<bean id="securityViewNamesProvider" class="org.summerb.approaches.springmvc.security.mvc.SecurityViewNamesProviderDefaultImpl" />
+	<bean class="org.summerb.approaches.springmvc.security.mvc.LoginController" />
+	<bean class="org.summerb.approaches.springmvc.security.mvc.LoginRestController" />
+	<bean class="org.summerb.approaches.springmvc.utils.CaptchaController" />
+	<bean class="org.summerb.approaches.springmvc.utils.AllMessagesController" />
+	
+<!-- 	<bean class="org.kissfarm.controller.mvc.ServletJavaConfig" /> -->
+	
+</beans>
+
+

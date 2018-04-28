@@ -1,4 +1,4 @@
-package org.kissfarmops.agent.application.impl;
+package org.kissfarmops.shared.api;
 
 import java.util.HashMap;
 

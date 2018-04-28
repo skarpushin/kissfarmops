@@ -1,0 +1,151 @@
+@CHARSET "UTF-8";
+
+.cyan {
+	background-color: #2222FF;
+}
+
+.error {
+	color: rgb(221,44,0)
+}
+
+.dc-card {
+	margin: 10px;
+}
+
+.dc-header {
+	background-color: #EEE;
+	padding: 10px;
+}
+
+.dc-content {
+	padding: 10px;
+	background-color: #FFF;
+}
+
+.dc-name, .dc-sn, .dc-lastSeen {
+	display: block;
+}
+
+.dc-name {
+	font-size: 120%;
+	font-weight: 700;
+}
+
+.dc-sn, .dc-lastSeen {
+	font-size: 90%;
+	font-weight: 100;
+	color: #555;
+}
+
+.dc-content>table td {
+	border-right: 4px solid white;
+}
+
+.dc-asset-name {
+	text-align: right;
+}
+
+.dc-asset-value {
+	font-size: 140%;
+}
+
+.dc-asset-icon {
+	cursor: default;
+}
+
+.dc-asset-icon-action {
+	cursor: pointer;
+}
+
+.btn-img-icon {
+	vertical-align: middle;
+}
+
+.active-menu-item {
+	border-bottom: 1px solid white;
+}
+
+.active-list-item {
+	background-color: #DDD;
+}
+
+.va {
+	vertical-align: middle;
+}
+
+.simpleTable, table.simpleTable td, table.simpleTable th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table.simpleTable td, table.simpleTable th {
+	padding: 8px;
+	vertical-align: top;
+}
+
+.clickableLikeLink {
+	cursor: pointer;
+	color: #55F
+}
+
+table.md-table td.md-cell, table.md-table th.md-column {
+	font-size: 17px;
+}
+
+table.md-table:not(.md-row-select) td.md-cell:first-child, table.md-table:not(.md-row-select) th.md-column:first-child {
+	padding-right: 0px;
+}
+
+md-toolbar.md-table-toolbar.md-default-theme:not(.md-menu-toolbar).md-default .md-button, md-toolbar.md-table-toolbar:not(.md-menu-toolbar).md-default .md-button {
+	color: #FFF;
+}
+
+.coin-flip.ng-hide-add {
+	animation: 0.15s flipXOut ease;
+}
+
+.coin-flip.ng-hide-remove {
+	animation: 0.15s flipXIn ease;
+}
+
+@keyframes flipXOut {
+  0% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 0deg);
+    opacity: 1;
+    transition-timing-function: ease-out;
+  }
+
+  99% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes flipXIn {
+  0% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 270deg);
+    opacity: 1;
+    transition-timing-function: ease-in;
+  }
+
+  99% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 359deg);
+  }
+
+  100% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 360deg);
+  }
+}
+
+.input-hint {
+	color: gray;
+    font-size: 90%;
+}
+
+md-input-container .md-char-counter, md-input-container .md-input-message-animation {
+	font-size: 100%;
+}

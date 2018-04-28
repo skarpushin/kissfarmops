@@ -16,6 +16,7 @@ import org.kissfarmops.agent.application.api.ActionFoldersResolver;
 import org.kissfarmops.agent.application.api.AppInstanceSpi;
 import org.kissfarmops.agent.application.api.AppListener;
 import org.kissfarmops.agent.utils.StringUtils;
+import org.kissfarmops.shared.api.EnvVars;
 import org.kissfarmops.shared.config.api.ActionConfig;
 import org.kissfarmops.shared.config.api.AppDefinitionConfig;
 import org.kissfarmops.shared.config.api.AppPrototypeConfig;

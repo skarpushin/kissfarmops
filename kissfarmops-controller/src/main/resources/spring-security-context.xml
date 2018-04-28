@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- See: http://blog.springsource.org/2010/03/06/behind-the-spring-security-namespace/ -->
+
+	<context:annotation-config />
+
+	<bean id="backgroundProcessRightsElevation" class="org.summerb.approaches.springmvc.security.elevation.ElevationRunnerImpl">
+		<constructor-arg>
+			<bean class="org.summerb.approaches.springmvc.security.elevation.ElevationStrategyBkgProcessImpl" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="usersServiceFacade" class="org.kissfarm.controller.security.impl.UsersServiceFacadeExImpl">
+		<property name="userRegisteredHandler">
+			<bean class="org.kissfarm.controller.security.impl.UserRegisteredHandlerImpl" />
+		</property>
+	</bean>
+
+	<bean id="securityContextResolver" class="org.summerb.approaches.springmvc.security.SecurityContextResolverImpl" />
+	<bean id="jsonResponseHelper" class="org.summerb.approaches.springmvc.security.implsrest.JsonResponseWriterGsonImpl" />
+	<bean id="redirectStrategy" class="org.springframework.security.web.DefaultRedirectStrategy" />
+
+	<!-- impls ============================================== -->
+	<bean id="authenticationProvider" class="org.summerb.approaches.springmvc.security.impls.AuthenticationProviderImpl">
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="loginEligibilityVerifier" ref="usersServiceFacade" />
+	</bean>
+
+	<bean id="invalidSessionStrategy" class="org.summerb.approaches.springmvc.security.impls.InvalidSessionStrategyImpl">
+		<property name="redirectStrategy" ref="redirectStrategy" />
+	</bean>
+
+	<bean id="authenticationFailureHandler" class="org.summerb.approaches.springmvc.security.impls.AuthenticationFailureHandlerImpl">
+		<property name="defaultFailureUrl" value="#{securityActionsUrlsProvider.loginFailedPath}" />
+		<property name="redirectStrategy" ref="redirectStrategy" />
+	</bean>
+
+	<!-- Remember me ============================================== -->
+	<bean id="rememberMeFilter" class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<constructor-arg ref="authenticationManager" />
+		<constructor-arg ref="rememberMeServices" />
+	</bean>
+
+	<bean id="rememberMeServices" class="org.summerb.approaches.springmvc.security.impls.PersistentTokenBasedRememberMeServicesEx">
+		<constructor-arg value="${security.rememberme.repository.key}" />
+		<constructor-arg ref="userDetailsService" />
+		<constructor-arg ref="persistentTokenRepository" />
+		<property name="cookieName" value="${security.rememberme.cookieName}" />
+		<property name="tokenValiditySeconds" value="${security.rememberme.authToken.validitySeconds}" />
+	</bean>
+
+	<bean id="userDetailsService" class="org.summerb.approaches.springmvc.security.impls.UserDetailsServiceDefaultImpl" />
+
+	<bean id="persistentTokenRepository" class="org.summerb.approaches.springmvc.security.impls.PersistentTokenRepositoryDefaultImpl" />
+
+	<bean id="rememberMeAuthenticationProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<constructor-arg value="${security.rememberme.repository.key}" />
+	</bean>
+
+	<!-- Access rules ============================================== -->
+	<alias name="filterChainProxy" alias="springSecurityFilterChain" />
+
+	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+		<sec:filter-chain-map request-matcher="ant">
+			<sec:filter-chain pattern="/static/**" filters="none" />
+			<sec:filter-chain pattern="/login/invalid-session" filters="none" />
+			<sec:filter-chain pattern="/rest/**"
+				filters="ipToMdcContext, securityContextFilter, restLogoutFilter, restLoginFilter, rememberMeFilter, servletApiFilter, anonFilter,
+				restSessionMgmtFilter, restExceptionTranslator, filterSecurityInterceptor" />
+			<sec:filter-chain pattern="/**"
+				filters="ipToMdcContext, securityContextFilter, logoutFilter, formLoginFilter, rememberMeFilter, requestCacheFilter,
+                 servletApiFilter, anonFilter, sessionMgmtFilter, exceptionTranslator, filterSecurityInterceptor" />
+		</sec:filter-chain-map>
+	</bean>
+
+	<bean id="ipToMdcContext" class="org.summerb.approaches.springmvc.security.IpToMdcContextFilter" />
+
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="securityMetadataSource" ref="metadataSource" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+	</bean>
+
+	<sec:filter-security-metadata-source id="metadataSource" use-expressions="false">
+		<sec:intercept-url pattern="/monitoring/**" access="ROLE_ADMIN" />
+		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</sec:filter-security-metadata-source>
+
+	<sec:global-method-security secured-annotations="enabled" authentication-manager-ref="authenticationManager"
+		metadata-source-ref="methodSecurityMetadataSource" proxy-target-class="true" />
+
+	<bean id="methodSecurityMetadataSource" class="org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource">
+	</bean>
+
+	<!-- Rest-specific beans ============================================== -->
+	<bean id="restLogoutFilter" class="org.summerb.approaches.springmvc.security.implsrest.RestLogoutFilter">
+		<constructor-arg ref="jsonResponseHelper" />
+		<property name="triggerPath" value="${security.url.restLogOutTriggerUrl}" />
+		<property name="handlers">
+			<list>
+				<ref bean="securityContextLogoutHandler" />
+				<ref bean="cookieClearingLogoutHandler" />
+				<ref bean="rememberMeServices" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="restLoginFilter" class="org.summerb.approaches.springmvc.security.implsrest.RestLoginFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
+		<property name="authenticationSuccessHandler" ref="restAuthenticationSuccessHandler" />
+		<property name="authenticationFailureHandler" ref="restAuthenticationFailureHandler" />
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="triggerPath" value="${security.url.restLogInTriggerUrl}" />
+	</bean>
+
+	<bean id="restSessionMgmtFilter" class="org.springframework.security.web.session.SessionManagementFilter">
+		<constructor-arg ref="securityContextRepository" />
+		<constructor-arg ref="sessionAuthenticationStrategy" />
+		<property name="invalidSessionStrategy" ref="restInvalidSessionStrategy" />
+		<property name="authenticationFailureHandler" ref="restAuthenticationFailureHandler" />
+	</bean>
+
+	<bean id="restInvalidSessionStrategy" class="org.summerb.approaches.springmvc.security.implsrest.RestInvalidSessionStrategy">
+		<constructor-arg ref="jsonResponseHelper" />
+	</bean>
+
+	<bean id="restAuthenticationSuccessHandler" class="org.summerb.approaches.springmvc.security.implsrest.RestAuthenticationSuccessHandler">
+		<constructor-arg ref="jsonResponseHelper" />
+	</bean>
+
+	<bean id="restAuthenticationFailureHandler" class="org.summerb.approaches.springmvc.security.implsrest.RestAuthenticationFailureHandler">
+		<constructor-arg ref="jsonResponseHelper" />
+	</bean>
+
+	<bean id="restExceptionTranslator" class="org.summerb.approaches.springmvc.security.implsrest.RestExceptionTranslator">
+		<constructor-arg ref="jsonResponseHelper" />
+		<constructor-arg>
+			<bean class="org.springframework.security.authentication.AuthenticationTrustResolverImpl" />
+		</constructor-arg>
+	</bean>
+
+	<!-- Deep Spring Security Config ============================================== -->
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+		<constructor-arg value="${security.password.secret}" />
+	</bean>
+
+	<bean id="securityContextFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+		<constructor-arg ref="securityContextRepository" />
+	</bean>
+
+	<bean id="securityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+		<property name="disableUrlRewriting" value="true" />
+	</bean>
+
+	<bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+
+	<bean id="cookieClearingLogoutHandler" class="org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler">
+		<constructor-arg value="JSESSIONID" />
+	</bean>
+
+	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg value="#{securityActionsUrlsProvider.defaultPath}" />
+		<constructor-arg>
+			<list>
+				<ref bean="securityContextLogoutHandler" />
+				<ref bean="cookieClearingLogoutHandler" />
+				<ref bean="rememberMeServices" />
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="${security.url.logOutTriggerUrl}" />
+	</bean>
+
+	<bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="#{securityActionsUrlsProvider.defaultPath}" />
+		<property name="redirectStrategy" ref="redirectStrategy" />
+	</bean>
+
+	<bean id="sessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
+
+	<bean id="formLoginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="usernameParameter" value="${security.login.usernameParameter}" />
+		<property name="passwordParameter" value="${security.login.passwordParameter}" />
+		<property name="filterProcessesUrl" value="${security.url.logInTriggerUrl}" />
+	</bean>
+
+	<bean id="requestCacheFilter" class="org.springframework.security.web.savedrequest.RequestCacheAwareFilter" />
+
+	<bean id="servletApiFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
+
+	<bean id="anonymous" class="org.springframework.security.core.userdetails.memory.UserAttribute">
+		<property name="password" value="anonymousUser" />
+		<property name="authoritiesAsString">
+			<list>
+				<value>anonymousUser</value>
+				<value>ROLE_ANONYMOUS</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="anonFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+		<constructor-arg value="${security.anonymous.keyId}" />
+		<constructor-arg value="#{anonymous.password}" />
+		<constructor-arg value="#{anonymous.authorities}" />
+	</bean>
+
+	<bean id="sessionMgmtFilter" class="org.springframework.security.web.session.SessionManagementFilter">
+		<constructor-arg ref="securityContextRepository" />
+		<constructor-arg ref="sessionAuthenticationStrategy" />
+		<property name="invalidSessionStrategy" ref="invalidSessionStrategy" />
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+	</bean>
+
+	<bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<constructor-arg value="#{securityActionsUrlsProvider.loginFormPath}" />
+	</bean>
+
+	<bean id="exceptionTranslator" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<constructor-arg ref="authenticationEntryPoint" />
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter" />
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+		<constructor-arg>
+			<list>
+				<ref bean="authenticationProvider" />
+				<ref bean="rememberMeAuthenticationProvider" />
+				<ref bean="anonymousProvider" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="webPrivilegeEvaluator" class="org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator">
+		<constructor-arg ref="filterSecurityInterceptor" />
+	</bean>
+
+	<bean id="anonymousProvider" class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+		<constructor-arg value="${security.anonymous.keyId}" />
+	</bean>
+
+	<bean id="securityExpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+
+</beans>

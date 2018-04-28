@@ -1,0 +1,7 @@
+In order to run project using embedded tomcat server:
+  `mvn tomcat7:run`
+
+In case having issues with debugging maven dependencies, install "maven
+Development Tools" from this install site:
+  `http://ifedorenko.github.io/m2e-extras/`
+  

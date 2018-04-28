@@ -1,0 +1,11 @@
+
+<div>
+	<md-checkbox name="{{::field.name}}" ng-model="dto[field.name]" has-ve="!!formState.ve[field.name]" class="md-align-top-left" flex>
+		{{ ::field.title }}
+		<br />
+		<div class="input-hint" ng-if="field.hint">{{::field.hint}}</div>
+		<div ng-messages="form[field.name].$error" md-auto-hide='false' class="error">
+		    <span ng-message="has-ve">{{ formState.ve[field.name] }}</span>
+		</div>
+	</md-checkbox>
+</div>

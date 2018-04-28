@@ -1,0 +1,16 @@
+
+<md-chips ng-model="chips.selectedChips"
+          md-transform-chip="chips.transformChip($chip)"
+          md-require-match="chips.allowToAddNew" md-autocomplete-snap>
+  <md-autocomplete
+      md-selected-item="chips.selectedItem"  
+      md-search-text="chips.searchText"
+      md-items="item in chips.querySearch(chips.searchText)"
+      md-item-text="chips.getText(item)"
+      placeholder="{{ field.hint }}">
+    <span md-highlight-text="chips.searchText">{{ chips.getText(item) }}</span>
+  </md-autocomplete>
+  <md-chip-template>
+    <span>{{ chips.getText($chip) }}</span>
+  </md-chip-template>
+</md-chips>

@@ -2,7 +2,7 @@ package org.kissfarmops.shared.config.api;
 
 import java.io.Serializable;
 
-import org.kissfarmops.agent.application.impl.EnvVars;
+import org.kissfarmops.shared.api.EnvVars;
 
 import lombok.Data;
 

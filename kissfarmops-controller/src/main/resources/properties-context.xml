@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/cache 
+	http://www.springframework.org/schema/cache/spring-cache.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:annotation-config />
+
+	<bean id="appAliasDao"
+		class="org.summerb.microservices.properties.impl.dao.impl.StringIdAliasDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="tableName" value="props_alias_app" />
+	</bean>
+
+	<bean id="domainAliasDao"
+		class="org.summerb.microservices.properties.impl.dao.impl.StringIdAliasDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="tableName" value="props_alias_domain" />
+	</bean>
+
+	<bean id="propertyNameAliasDao"
+		class="org.summerb.microservices.properties.impl.dao.impl.StringIdAliasDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="tableName" value="props_alias_name" />
+	</bean>
+
+	<bean id="appAliasService"
+		class="org.summerb.microservices.properties.impl.StringIdAliasServiceEagerImpl">
+		<property name="stringIdAliasDao" ref="appAliasDao" />
+		<property name="executorService" ref="executorService" />
+	</bean>
+
+	<bean id="domainAliasService"
+		class="org.summerb.microservices.properties.impl.StringIdAliasServiceEagerImpl">
+		<property name="stringIdAliasDao" ref="domainAliasDao" />
+		<property name="executorService" ref="executorService" />
+	</bean>
+
+	<bean id="propertyNameAliasService"
+		class="org.summerb.microservices.properties.impl.StringIdAliasServiceEagerImpl">
+		<property name="stringIdAliasDao" ref="propertyNameAliasDao" />
+		<property name="executorService" ref="executorService" />
+	</bean>
+
+	<bean id="propertyDaoImpl"
+		class="org.summerb.microservices.properties.impl.dao.impl.PropertyDaoImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="propertyService"
+		class="org.summerb.microservices.properties.impl.PropertyServiceImpl">
+		<property name="propertyDao" ref="propertyDaoImpl" />
+		<property name="appNameAlias" ref="appAliasService" />
+		<property name="domainNameAlias" ref="domainAliasService" />
+		<property name="propertyNameAlias" ref="propertyNameAliasService" />
+	</bean>
+
+	<bean id="userWebPropertiesActual"
+		class="org.summerb.microservices.properties.impl.SimplePropertyServiceImpl"
+		autowire-candidate="false" p:appName="WEBAPP" p:domainName="userWebProperties"
+		p:propertyService-ref="propertyService">
+	</bean>
+	<bean id="userWebProperties"
+		class="org.summerb.microservices.properties.impl.SimplePropertyServiceCachedImpl"
+		p:simplePropertyService-ref="userWebPropertiesActual" />
+
+</beans>

@@ -1,0 +1,35 @@
+
+<md-toolbar class="md-table-toolbar md-default">
+  <div class="md-toolbar-tools">
+	<span ng-show="tableActions">
+		 <md-button ng-repeat="action in tableActions" ng-click="action.handler($event)" class="md-raised md-primary" aria-label="action.title">
+		      <md-icon ng-if="action.icon">{{ action.icon }}</md-icon>
+		      <span ng-if="action.title">{{ action.title }}</span>
+	    </md-button>				
+	</span>
+	<span flex></span>
+	<span ng-show="isQuickSearchEnabled" style="white-space: nowrap">
+	    <form flex name="search.form">
+		   	<md-button class="md-fab md-mini md-primary" ng-disabled="true" style="opacity: 0">
+	    	<!-- this button is never actually visible - we keep it here to prevent input field fidgeting during animation -->
+		    <md-icon>search</md-icon>
+		    </md-button>
+		    <md-button class="md-fab md-mini md-primary coin-flip" ng-disabled="true" ng-hide="hideSearchIcon">
+		    	<!-- TODO: When clicked on this button -- set focus to input field -->
+		      <md-icon style="color: #000">search</md-icon>
+		    </md-button>
+		    <md-button class="md-fab md-mini coin-flip" ng-click="cancelSearch()" ng-hide="hideSearchDiscard">
+		      <md-icon style="color: #FFF">close</md-icon>
+		    </md-button>
+	    	<input size="8" type="text" ng-model="$parent.searchStr" ng-model-options="searchInputOptions" placeholder="search">
+	    </form>
+	</span>
+  </div>
+</md-toolbar>	
+
+<md-divider></md-divider>
+
+<div layout="column" layout-align="center" ng-show="rows.length == 0" style="padding-top: 60px; padding-bottom: 60px; text-align: center;">
+	<span><msg>phrase.noDataToDisplay</msg></span>
+	<span ng-show="ajax"><msg>phrase.loadingData</msg></span>
+</div>

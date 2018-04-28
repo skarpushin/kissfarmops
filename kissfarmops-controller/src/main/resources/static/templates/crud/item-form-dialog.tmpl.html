@@ -1,0 +1,21 @@
+<md-dialog>
+  <form name="form" ng-cloak>
+	<md-toolbar ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-toolbar.tmpl.html'">
+	</md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+		<div layout="column">
+
+			<!-- Your inputs goe here -->
+			<!-- i.e. <crud-input-text name="name"></crud-input-text> -->
+
+		</div>
+		<div class="md-padding error" ng-show="!!formState.lastExceptionMessage">
+			{{ formState.lastExceptionMessage }}
+		</div>
+      </div>
+    </md-dialog-content>
+	<md-dialog-actions layout="row" ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-actions.tmpl.html'">
+	</md-dialog-actions>
+  </form>
+</md-dialog>

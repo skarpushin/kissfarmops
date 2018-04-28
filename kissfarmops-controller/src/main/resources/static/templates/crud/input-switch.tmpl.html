@@ -1,0 +1,10 @@
+
+<div style="margin-bottom: 16px;">
+	<md-switch name="{{::field.name}}" ng-model="dto[field.name]" has-ve="!!formState.ve[field.name]" style="margin-bottom: 0;">
+		{{ ::field.title }}
+	</md-switch>
+	<div class="input-hint" ng-if="field.hint">{{::field.hint}}</div>
+	<div ng-messages="form[field.name].$error" md-auto-hide='false' class="error">
+	    <span ng-message="has-ve">{{ formState.ve[field.name] }}</span>
+	</div>
+</div>
