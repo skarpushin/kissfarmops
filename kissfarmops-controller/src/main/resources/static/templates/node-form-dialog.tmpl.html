@@ -1,0 +1,40 @@
+<md-dialog>
+<form name="form" ng-cloak>
+	<md-toolbar
+		ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-toolbar.tmpl.html'">
+	</md-toolbar>
+	<md-dialog-content>
+	<div class="md-dialog-content">
+		<div layout="column">
+			<div layout-gt-sm="row">
+				<crud-input-text name="id" class="md-block" flex-gt-sm></crud-input-text>
+			 	 <div flex="5" hide-xs hide-sm></div>
+				<crud-input-text name="hostName" class="md-block" flex-gt-sm></crud-input-text>
+			 	 <div flex="5" hide-xs hide-sm></div>
+				<crud-input-text name="publicIp" class="md-block" flex-gt-sm></crud-input-text>
+			</div>
+
+			<div layout-gt-sm="row">
+				<crud-input-text name="agentAuthToken" class="md-block" flex-gt-sm></crud-input-text>
+			 	 <div flex="5" hide-xs hide-sm></div>
+				<crud-input-text name="password" class="md-block" flex-gt-sm></crud-input-text>
+			</div>
+		</div>
+      	<div layout="column">
+      		<crud-input-chips name="tagsArr"></crud-input-chips>
+      	</div>
+      	<div layout="column">
+			<div layout-gt-sm="row">
+				<crud-input-switch name="blocked" class="md-block"></crud-input-switch>
+			</div>
+		</div>
+		
+		<div class="md-padding error"
+			ng-show="!!formState.lastExceptionMessage">{{ formState.lastExceptionMessage }}</div>
+	</div>
+	</md-dialog-content>
+	<md-dialog-actions layout="row"
+		ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-actions.tmpl.html'">
+	</md-dialog-actions>
+</form>
+</md-dialog>

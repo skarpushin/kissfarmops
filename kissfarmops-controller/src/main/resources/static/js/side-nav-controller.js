@@ -46,12 +46,18 @@ KfCtrlApp.controller('SideNavController',
 
 					$scope.menuGroups = [];
 
-					$scope.menuGroups.push(makeMenuGroup(msgs['term.mainFeatures'], [ makeMenuItem(msgs['term.dashboard'], '/web/dashboard', 'multiline_chart') ]));
+					$scope.menuGroups.push(makeMenuGroup(msgs['term.mainFeatures'], [ 
+						makeMenuItem(msgs['term.dashboard'], '/web/dashboard', 'multiline_chart'),
+						makeMenuItem(msgs['term.agentAuthTokens'], '/web/agent-auth-token', null),
+						makeMenuItem(msgs['term.nodes'], '/web/node', null),
+					]));
 
-					if (currentUserRoles.indexOf('ROLE_ADMIN') >= 0) {
-						$scope.menuGroups.push(makeMenuGroup(msgs['term.administration'], [ makeMenuItem('Swagger UI', '/swagger-ui.html'),
-								makeMenuItem('Java Melody', '/monitoring'), makeMenuItem('Exceptions monitor', '/error/exc') ]));
-					}
+					// if (currentUserRoles.indexOf('ROLE_ADMIN') >= 0) {
+					$scope.menuGroups.push(makeMenuGroup(msgs['term.administration'], [
+						makeMenuItem('Java Melody', '/monitoring'), 
+						makeMenuItem('Exceptions monitor', '/error/exc') 
+					]));
+					// }
 
 					$scope.menuGroups.push(makeMenuGroup(msgs['term.user'], [
 							makeMenuItem(msgs['security.changePassword'], '/login/change', 'settings_backup_restore'),

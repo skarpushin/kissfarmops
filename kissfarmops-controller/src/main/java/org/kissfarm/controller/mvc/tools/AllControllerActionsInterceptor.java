@@ -13,6 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
+import org.springframework.web.socket.sockjs.support.SockJsHttpRequestHandler;
 import org.summerb.approaches.security.api.CurrentUserNotFoundException;
 import org.summerb.approaches.security.api.SecurityContextResolver;
 import org.summerb.approaches.springmvc.controllers.ControllerBase;
@@ -39,7 +40,7 @@ public class AllControllerActionsInterceptor extends ControllerBase implements H
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if (handler instanceof ResourceHttpRequestHandler) {
+		if (isIgnoreHandler(handler)) {
 			// just resource request
 			return true;
 		}
@@ -50,11 +51,15 @@ public class AllControllerActionsInterceptor extends ControllerBase implements H
 		return true;
 	}
 
+	private boolean isIgnoreHandler(Object handler) {
+		return handler instanceof ResourceHttpRequestHandler || handler instanceof SockJsHttpRequestHandler;
+	}
+
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 
-		if (handler instanceof ResourceHttpRequestHandler) {
+		if (isIgnoreHandler(handler)) {
 			return;
 		}
 

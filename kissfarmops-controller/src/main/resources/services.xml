@@ -25,5 +25,34 @@
 
 	<!-- Our custom services goes here -->
 	<bean class="org.kissfarm.controller.services.Refs" />
+	<bean class="org.kissfarm.controller.services.ScaffoldedConfig" />
+	<bean class="org.kissfarm.controller.services.nodes.impl.TagParserImpl" />
 
+	<bean id="nodeTagAuthStrategy" class="org.kissfarm.controller.services.nodes.impl.NodeTagAuthStrategyImpl" />
+	<bean id="nodeTagService" class="org.kissfarm.controller.services.nodes.impl.NodeTagServiceImpl">
+		<property name="dao">
+			<bean class="org.kissfarm.controller.services.nodes.impl.NodeTagDaoImpl">
+				<property name="dataSource" ref="dataSource" />
+				<property name="tableName" value="node_tags" />
+			</bean>
+		</property>
+		<property name="wireTap">
+			<bean class="org.summerb.approaches.jdbccrud.impl.wireTaps.EasyCrudWireTapDelegatingImpl">
+				<constructor-arg>
+					<util:list>
+						<bean class="org.summerb.approaches.jdbccrud.impl.wireTaps.EasyCrudWireTapValidationImpl">
+							<constructor-arg>
+								<bean class="org.kissfarm.controller.services.tags.impl.TagValidationStrategyImpl" />
+							</constructor-arg>
+						</bean>
+						<bean class="org.summerb.approaches.jdbccrud.impl.wireTaps.EasyCrudWireTapPerRowAuthImpl">
+							<constructor-arg ref="nodeTagAuthStrategy" />
+						</bean>
+						<bean class="org.summerb.approaches.jdbccrud.impl.wireTaps.EasyCrudWireTapEventBusImpl" />
+					</util:list>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
 </beans>

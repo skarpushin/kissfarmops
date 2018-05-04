@@ -11,6 +11,8 @@
      http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<context:component-scan base-package="org.kissfarm.controller.**.mvc" />
+	<context:component-scan base-package="org.kissfarm.controller.rest.**.controllers" />
+	
 	<bean class="org.summerb.approaches.jdbccrud.rest.commonpathvars.CommonPathVariableOperationBuilderPlugin" />
 
 	<sec:global-method-security secured-annotations="enabled" authentication-manager-ref="authenticationManager"

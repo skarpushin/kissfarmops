@@ -17,7 +17,10 @@
 
 	<bean id="backgroundProcessRightsElevation" class="org.summerb.approaches.springmvc.security.elevation.ElevationRunnerImpl">
 		<constructor-arg>
-			<bean class="org.summerb.approaches.springmvc.security.elevation.ElevationStrategyBkgProcessImpl" />
+			<bean class="org.summerb.approaches.springmvc.security.elevation.ElevationStrategyUserBasedImpl">
+				<!-- NOTE: User background@process.id is expected to be created in the DB with role ROLE_BACKGROUND_PROCESS  -->
+				<constructor-arg value="background@process.id" />
+			</bean>
 		</constructor-arg>
 	</bean>
 
@@ -75,6 +78,8 @@
 		<sec:filter-chain-map request-matcher="ant">
 			<sec:filter-chain pattern="/static/**" filters="none" />
 			<sec:filter-chain pattern="/login/invalid-session" filters="none" />
+			<sec:filter-chain pattern="/rest/api/v1/node-endpoint/register" filters="ipToMdcContext, restExceptionTranslator" />
+			
 			<sec:filter-chain pattern="/rest/**"
 				filters="ipToMdcContext, securityContextFilter, restLogoutFilter, restLoginFilter, rememberMeFilter, servletApiFilter, anonFilter,
 				restSessionMgmtFilter, restExceptionTranslator, filterSecurityInterceptor" />
@@ -167,7 +172,7 @@
 	<bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
 
 	<bean id="cookieClearingLogoutHandler" class="org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler">
-		<constructor-arg value="JSESSIONID" />
+		<constructor-arg value="${security.session.cookie.name}" />
 	</bean>
 
 	<bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">

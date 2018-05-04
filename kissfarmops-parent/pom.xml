@@ -17,6 +17,12 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<java.version>1.8</java.version>
 		<skip.unit.tests>false</skip.unit.tests>
+		
+		<spring.version>5.0.5.RELEASE</spring.version>
+		<spring.security.version>5.0.4.RELEASE</spring.security.version>
+		<spring.integration.version>5.0.4.RELEASE</spring.integration.version>
+		
+		<summerb.version>2.6.1</summerb.version>
 	</properties>
 
 	<developers>

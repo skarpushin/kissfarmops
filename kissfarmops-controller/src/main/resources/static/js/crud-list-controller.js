@@ -684,6 +684,40 @@ function ManyToManyReferencesRowEnricher(refFromInitiatorToM2m, refFromM2mToDict
 	}
 }
 
+function OneToManyReferencesRowEnricher(referenceName, enrichingStrategy) {
+	return function(initiatorRow, refsResolved, tables, outAddedFields) {
+		try {
+			var refToDict = refsResolved[referenceName];
+			var dictTable = tables[refToDict.toEntity].rows;
+
+			var srcItemId = initiatorRow[refToDict.fromField];
+			var refedRows = [];
+			for (var candidateRowIdx in dictTable) {
+				if (!dictTable.hasOwnProperty(candidateRowIdx)) {
+					continue;
+				}
+				var candidateRow = dictTable[candidateRowIdx];
+				if (candidateRow[refToDict.toField] != srcItemId) {
+					continue;
+				}
+				refedRows.push(candidateRow);
+			}
+
+			var newFields = enrichingStrategy(initiatorRow, refedRows);
+			for ( var fld in newFields) {
+				if (!newFields.hasOwnProperty(fld)) {
+					continue;
+				}
+				initiatorRow[fld] = newFields[fld];
+				outAddedFields.push(fld);
+			}
+		} catch (e) {
+			console.log("OneToManyReferencesRowEnricher failed. " + e);
+		}
+	}
+}
+
+
 function ManyToOneReferencesRowEnricher(referenceName, enrichingStrategy) {
 	return function(initiatorRow, refsResolved, tables, outAddedFields) {
 		try {

@@ -66,6 +66,7 @@
 	<import resource="spring-security-context.xml" />
 	<import resource="easy-crud-commons.xml" />
 	<import resource="services.xml" />
+	<import resource="integration.xml" />
 
 	<bean id="absoluteUrlBuilder" class="org.summerb.approaches.springmvc.utils.AbsoluteUrlBuilderDefaultImpl" />
 	<bean id="securityActionsUrlsProvider" class="org.summerb.approaches.springmvc.security.mvc.SecurityActionsUrlsProviderDefaultImpl" />
@@ -76,6 +77,19 @@
 				<property name="pattern" value=".*Impl.*" />
 			</bean>
 		</property>
+	</bean>
+
+	<bean id="sessionRepository" class="org.springframework.session.MapSessionRepository">
+	</bean>
+
+	<bean id="httpSessionStrategy" class="org.springframework.session.web.http.CookieHttpSessionStrategy">
+		<property name="cookieSerializer">
+			<bean class="org.springframework.session.web.http.DefaultCookieSerializer" p:cookieName="${security.session.cookie.name}" />
+		</property>
+	</bean>
+	<bean id="springSessionRepositoryFilter" class="org.springframework.session.web.http.SessionRepositoryFilter">
+		<constructor-arg ref="sessionRepository" />
+		<property name="httpSessionStrategy" ref="httpSessionStrategy" />
 	</bean>
 
 </beans>

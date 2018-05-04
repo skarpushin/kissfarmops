@@ -4,4 +4,8 @@ In order to run project using embedded tomcat server:
 In case having issues with debugging maven dependencies, install "maven
 Development Tools" from this install site:
   `http://ifedorenko.github.io/m2e-extras/`
-  
+
+In order for lombok to work don't forget to add
+   -Duser.name=Sergey Karpushin
+   -javaagent:/home/sergeyk/_apps/sts-3.9.2.RELEASE/lombok.jar
+... to STS.ini

@@ -23,7 +23,7 @@
 		</layout>
 	</appender>
 
-	<category name="org.kissfarmops">
+	<category name="org.kissfarm">
 		<priority value="TRACE" />
 	</category>
 

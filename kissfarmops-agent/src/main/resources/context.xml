@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/cache 
+		http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="nullValue" value="" />
+		<property name="locations">
+			<list>
+				<value>classpath:kfa-default.properties</value>
+				<value>file:kfa-devmode.properties</value>
+				<value>file:/opt/conf/kfa/kfa.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<context:annotation-config />
+
+	<bean class="org.kissfarm.agent.entrypoint.EntryPoint" />
+
+	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool" destroy-method="shutdownNow" />
+
+	<bean id="scheduledExecutorService" class="java.util.concurrent.Executors" factory-method="newScheduledThreadPool" destroy-method="shutdownNow">
+		<constructor-arg value="4" />
+	</bean>
+
+	<bean id="eventBus" class="com.google.common.eventbus.EventBus" />
+	<bean class="com.google.gson.Gson" />
+
+	<bean id="publicIpResolver" class="org.kissfarm.agent.node_identity.impl.PublicIpResolverWhatsMyIpImpl" />
+	<bean class="org.kissfarm.agent.node_identity.impl.SelfIdentificationFileBasedImpl" p:nodeIdentityFilename="${NodeIdentity.filename}" />
+	<bean id="firstLifecycle" class="org.kissfarm.agent.lifecycle.SelfIdLifecycle" />
+
+	<bean class="org.kissfarm.agent.client.impl.ControllerConnectionImpl" />
+	<bean class="org.kissfarm.agent.lifecycle.RegistrationLifecycle" p:filePathName="${ControllerConnectionInfo.filename}"
+		p:defaultAuthToken="${RegistrationLifecycle.defaultAuthToken}" p:defaultBaseUrl="${RegistrationLifecycle.defaultBaseUrl}" />
+
+	<bean class="org.kissfarm.agent.lifecycle.WsConnectLifecycle" />
+
+	<bean class="org.kissfarm.agent.lifecycle.InitialConfigLifecycle" />
+	
+	<bean class="org.kissfarm.agent.lifecycle.NormalLifecycle" />
+
+	<import resource="file:**context-devmode.xml" />
+
+</beans>
+

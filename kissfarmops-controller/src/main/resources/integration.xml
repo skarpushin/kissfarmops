@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http" xmlns:int-script="http://www.springframework.org/schema/integration/scripting"
+	xmlns:int-security="http://www.springframework.org/schema/integration/security" xmlns:int-stomp="http://www.springframework.org/schema/integration/stomp"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/integration
+    http://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util.xsd
+    http://www.springframework.org/schema/integration/file
+    http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+    http://www.springframework.org/schema/integration/http
+    http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+    http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task.xsd
+    http://www.springframework.org/schema/integration/scripting 
+    http://www.springframework.org/schema/integration/scripting/spring-integration-scripting.xsd
+    http://www.springframework.org/schema/integration/security
+    http://www.springframework.org/schema/integration/security/spring-integration-security.xsd">
+
+	<bean class="org.kissfarm.controller.websockets.WebSocketConfig" />
+	<bean class="org.kissfarm.controller.websockets.WebSocketSecurityConfig" />
+	<bean id="messagingGate" class="org.kissfarm.controller.websockets.StompGateImpl" />
+	<bean class="org.kissfarm.controller.websockets.IntegrationConfig" />
+	<bean class="org.kissfarm.controller.websockets.NodeEventsReceivingGateway" />
+
+	<!-- https://docs.spring.io/spring-integration/reference/htmlsingle/#global-channel-configuration-interceptors -->
+	<int:channel-interceptor order="-1">
+		<!-- https://docs.spring.io/spring-integration/reference/html/security.html -->
+		<bean class="org.springframework.integration.security.channel.SecurityContextPropagationChannelInterceptor" />
+	</int:channel-interceptor>
+
+	<int:gateway id="eventFromNodePropagator" service-interface="org.kissfarm.controller.websockets.EventFromNodePropagator"
+		default-request-channel="nodeToControllerChannel" error-channel="errorLogger" />
+
+	<int:publish-subscribe-channel id="nodeToControllerChannel" task-executor="executor" />
+	<task:executor id="executor" pool-size="10" />
+
+	<int:service-activator input-channel="nodeToControllerChannel" ref="nodeMetricsRecorder" />
+	<bean id="nodeMetricsRecorder" class="org.kissfarm.controller.websockets.NodeEventsPersist" />
+
+	<int:service-activator input-channel="nodeToControllerChannel" ref="uiNotifier" output-channel="controllerToUi" />
+	<bean id="uiNotifier" class="org.kissfarm.controller.websockets.NodeEventsUiNotifier" />
+	<int:channel id="controllerToUi" />
+	<int:outbound-channel-adapter channel="controllerToUi" ref="messagingGate" method="sendToUi" />
+
+	<int:service-activator input-channel="nodeToControllerChannel" ref="nodeRequestsProcessor" />
+	<bean id="nodeRequestsProcessor" class="org.kissfarm.controller.websockets.NodeRequestsProcessor" />
+
+	<int:logging-channel-adapter id="errorLogger" log-full-message="true" level="ERROR"
+		logger-name="org.kissfarm.controller.INTEGRATION" />
+
+	<!-- TODO: outbound messages to node -->
+	<!-- TODO: outbound messages to workflow manager -->
+
+	<!-- TODO: Consider persistence for messages: JdbcChannelMessageStore -->
+
+</beans>
