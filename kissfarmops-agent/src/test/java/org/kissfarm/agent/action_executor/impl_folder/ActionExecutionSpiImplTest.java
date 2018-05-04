@@ -19,14 +19,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarm.agent.action_executor.api.ActionStatus;
+import org.kissfarm.agent.action_executor.api.ActionInvocationInfo;
 import org.kissfarm.agent.action_executor.api.ActionsExecutionListener;
 import org.kissfarm.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarm.agent.process_execution.impl.ProcessExecutorFactoryImpl;
 import org.kissfarm.agent.serializer.api.DtoSerializer;
 import org.kissfarm.agent.serializer.impl.DtoSerializerGsonImpl;
-import org.kissfarmops.shared.actions.api.ActionCommands;
-import org.kissfarmops.shared.api.IdTools;
+import org.kissfarm.shared.config.dto.ActionCommands;
+import org.kissfarm.shared.config.dto.ActionStatus;
+import org.kissfarm.shared.tools.IdTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

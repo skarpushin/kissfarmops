@@ -9,19 +9,19 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.kissfarm.agent.action_executor.api.ActionExecutionFactory;
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarm.agent.action_executor.api.ActionStatus;
+import org.kissfarm.agent.action_executor.api.ActionInvocationInfo;
 import org.kissfarm.agent.action_executor.api.ActionsExecutionListener;
-import org.kissfarm.agent.action_executor.impl_folder.ActionInvocationInfo;
 import org.kissfarm.agent.application.api.ActionFoldersResolver;
 import org.kissfarm.agent.application.api.AppInstanceSpi;
 import org.kissfarm.agent.application.api.AppListener;
-import org.kissfarm.agent.utils.StringUtils;
-import org.kissfarmops.shared.api.EnvVars;
-import org.kissfarmops.shared.config.api.ActionConfig;
-import org.kissfarmops.shared.config.api.AppDefinitionConfig;
-import org.kissfarmops.shared.config.api.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.ActionConfig;
+import org.kissfarm.shared.config.dto.ActionStatus;
+import org.kissfarm.shared.config.dto.AppDefinitionConfig;
+import org.kissfarm.shared.config.dto.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.EnvVars;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.google.common.base.Preconditions;
 

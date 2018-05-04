@@ -1,5 +1,7 @@
 package org.kissfarm.agent.action_executor.impl_folder;
 
+import org.kissfarm.agent.action_executor.api.ResumeMethod;
+
 /**
  * This used when suspending action. Instance will be saved on disk as a next
  * step to be performed. After reconciliation it will continue

@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.kissfarm.agent.client.api.ControllerConnection;
-import org.kissfarm.agent.client.api.StompSessionHolder;
-import org.kissfarm.agent.client.impl.StompSessionEvt;
-import org.kissfarm.agent.config.api.ControllerConnectionInfo;
-import org.kissfarm.agent.config.api.ControllerConnectionInfoHolder;
-import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarm.agent.client.api.ControllerConnectionInfo;
+import org.kissfarm.agent.client.api.ControllerConnectionInfoHolder;
+import org.kissfarm.agent.client.websocket.StompSessionEvt;
+import org.kissfarm.agent.client.websocket.StompSessionHolder;
+import org.kissfarm.shared.websocket.WebSocketCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

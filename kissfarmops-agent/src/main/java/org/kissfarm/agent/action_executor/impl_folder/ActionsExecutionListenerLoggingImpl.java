@@ -1,8 +1,8 @@
 package org.kissfarm.agent.action_executor.impl_folder;
 
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarm.agent.action_executor.api.ActionStatus;
 import org.kissfarm.agent.action_executor.api.ActionsExecutionListener;
+import org.kissfarm.shared.config.dto.ActionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

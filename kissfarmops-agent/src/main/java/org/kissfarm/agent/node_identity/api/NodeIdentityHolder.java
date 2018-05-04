@@ -1,6 +1,6 @@
 package org.kissfarm.agent.node_identity.api;
 
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 
 public interface NodeIdentityHolder {
 	NodeIdentity getNodeIdentity();

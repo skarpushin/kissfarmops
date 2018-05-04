@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.kissfarm.agent.client.api.ControllerConnection;
-import org.kissfarm.agent.config.api.ControllerConnectionInfo;
-import org.kissfarm.agent.config.api.ControllerConnectionInfoHolder;
+import org.kissfarm.agent.client.api.ControllerConnectionInfo;
+import org.kissfarm.agent.client.api.ControllerConnectionInfoHolder;
 import org.kissfarm.agent.node_identity.api.NodeIdentityHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;

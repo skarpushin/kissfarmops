@@ -5,12 +5,12 @@ import java.net.UnknownHostException;
 
 import org.kissfarm.agent.node_identity.api.PublicIpResolver;
 import org.kissfarm.agent.node_identity.api.SelfIdentification;
-import org.kissfarm.agent.utils.StringUtils;
-import org.kissfarmops.shared.api.IdTools;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
+import org.kissfarm.shared.tools.IdTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;

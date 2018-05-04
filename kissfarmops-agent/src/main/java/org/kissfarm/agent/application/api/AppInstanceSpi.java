@@ -3,8 +3,8 @@ package org.kissfarm.agent.application.api;
 import java.util.Map;
 
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarmops.shared.config.api.AppDefinitionConfig;
-import org.kissfarmops.shared.config.api.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefinitionConfig;
+import org.kissfarm.shared.config.dto.AppPrototypeConfig;
 
 /**
  * SPI for interracting with 1 application of a particular version

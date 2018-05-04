@@ -1,6 +1,7 @@
 package org.kissfarm.agent.action_executor.impl_folder;
 
-import org.kissfarm.agent.action_executor.api.ActionStatus;
+import org.kissfarm.agent.action_executor.api.ResumeMethod;
+import org.kissfarm.shared.config.dto.ActionStatus;
 
 public class StatusCheckTimedOutDeferedHandler implements ResumeMethod {
 	private static final long serialVersionUID = 5137099904456434018L;

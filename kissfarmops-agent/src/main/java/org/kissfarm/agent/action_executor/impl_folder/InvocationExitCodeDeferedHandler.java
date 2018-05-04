@@ -1,5 +1,7 @@
 package org.kissfarm.agent.action_executor.impl_folder;
 
+import org.kissfarm.agent.action_executor.api.ResumeMethod;
+
 public class InvocationExitCodeDeferedHandler implements ResumeMethod {
 	private static final long serialVersionUID = -2023399054231328176L;
 

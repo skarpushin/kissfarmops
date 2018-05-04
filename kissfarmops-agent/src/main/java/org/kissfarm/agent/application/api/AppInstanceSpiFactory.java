@@ -1,7 +1,7 @@
 package org.kissfarm.agent.application.api;
 
-import org.kissfarmops.shared.config.api.AppDefinitionConfig;
-import org.kissfarmops.shared.config.api.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefinitionConfig;
+import org.kissfarm.shared.config.dto.AppPrototypeConfig;
 
 public interface AppInstanceSpiFactory {
 

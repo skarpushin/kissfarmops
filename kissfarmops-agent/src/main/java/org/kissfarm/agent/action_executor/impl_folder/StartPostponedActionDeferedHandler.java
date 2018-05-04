@@ -2,7 +2,8 @@ package org.kissfarm.agent.action_executor.impl_folder;
 
 import java.util.Map;
 
-import org.kissfarm.agent.action_executor.api.ActionStatus;
+import org.kissfarm.agent.action_executor.api.ResumeMethod;
+import org.kissfarm.shared.config.dto.ActionStatus;
 
 public class StartPostponedActionDeferedHandler implements ResumeMethod {
 	private static final long serialVersionUID = -3268509627747786241L;

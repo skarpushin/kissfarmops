@@ -13,7 +13,7 @@ import org.kissfarm.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarm.agent.process_execution.impl.ProcessExecutorFactoryImpl;
 import org.kissfarm.agent.serializer.api.DtoSerializer;
 import org.kissfarm.agent.serializer.impl.DtoSerializerGsonImpl;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 
 public class SelfIdentificationActionBasedImplTest {
 	private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(16);

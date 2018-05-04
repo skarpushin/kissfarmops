@@ -2,7 +2,7 @@
 package org.kissfarm.controller.websockets.cfg;
 
 import org.kissfarm.controller.security.SecurityConstantsEx;
-import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarm.shared.websocket.WebSocketCommons;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;

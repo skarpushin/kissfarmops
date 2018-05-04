@@ -5,8 +5,8 @@ import org.kissfarm.agent.application.api.ActionFoldersResolver;
 import org.kissfarm.agent.application.api.AppInstanceSpi;
 import org.kissfarm.agent.application.api.AppInstanceSpiFactory;
 import org.kissfarm.agent.application.api.AppListener;
-import org.kissfarmops.shared.config.api.AppDefinitionConfig;
-import org.kissfarmops.shared.config.api.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefinitionConfig;
+import org.kissfarm.shared.config.dto.AppPrototypeConfig;
 
 public class AppInstanceSpiFactoryImpl implements AppInstanceSpiFactory {
 	private ActionFoldersResolver actionFoldersResolver;

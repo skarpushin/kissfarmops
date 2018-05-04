@@ -1,7 +1,7 @@
 package org.kissfarm.agent.client.api;
 
 import org.apache.http.client.CookieStore;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 import org.summerb.approaches.springmvc.security.dto.LoginParams;
 
 public interface ControllerConnection {

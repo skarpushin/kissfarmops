@@ -3,9 +3,9 @@ package org.kissfarm.agent.node_identity.impl;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
-import org.kissfarm.agent.utils.StringUtils;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.util.StringUtils;
 
 import com.google.common.base.Preconditions;
 

@@ -3,6 +3,8 @@ package org.kissfarm.agent.action_executor.api;
 import java.util.Arrays;
 import java.util.List;
 
+import org.kissfarm.shared.config.dto.ActionStatus;
+
 /**
  * Interface to control and get info about action execution that was already
  * started

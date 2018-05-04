@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kissfarm.controller.security.SecurityConstantsEx;
 import org.kissfarm.controller.websockets.api.StompOutboundGateway;
-import org.kissfarmops.shared.websocket.WebSocketCommons;
-import org.kissfarmops.shared.websocket.api.NodeConnectedEvent;
-import org.kissfarmops.shared.websocket.api.NodeDisconnectedEvent;
+import org.kissfarm.shared.websocket.WebSocketCommons;
+import org.kissfarm.shared.websocket.api.NodeConnectedEvent;
+import org.kissfarm.shared.websocket.api.NodeDisconnectedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

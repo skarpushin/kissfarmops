@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 
 import org.kissfarm.controller.services.nodes.api.NodeStatus;
 import org.kissfarm.controller.services.nodes.api.NodeStatusService;
-import org.kissfarmops.shared.websocket.api.NodeConnectedEvent;
-import org.kissfarmops.shared.websocket.api.NodeDisconnectedEvent;
+import org.kissfarm.shared.websocket.api.NodeConnectedEvent;
+import org.kissfarm.shared.websocket.api.NodeDisconnectedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

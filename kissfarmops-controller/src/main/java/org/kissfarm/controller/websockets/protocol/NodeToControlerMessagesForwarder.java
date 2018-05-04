@@ -1,6 +1,6 @@
 package org.kissfarm.controller.websockets.protocol;
 
-import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarm.shared.websocket.WebSocketCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.kissfarm.agent.node_identity.api.PublicIpResolver;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 
 public class SelfIdentificationFileBasedImplTest {
 	@Test

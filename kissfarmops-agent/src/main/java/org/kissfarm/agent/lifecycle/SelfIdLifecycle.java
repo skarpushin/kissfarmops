@@ -2,7 +2,7 @@ package org.kissfarm.agent.lifecycle;
 
 import org.kissfarm.agent.node_identity.api.NodeIdentityHolder;
 import org.kissfarm.agent.node_identity.api.SelfIdentification;
-import org.kissfarmops.shared.nodeid.api.NodeIdentity;
+import org.kissfarm.shared.api.NodeIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

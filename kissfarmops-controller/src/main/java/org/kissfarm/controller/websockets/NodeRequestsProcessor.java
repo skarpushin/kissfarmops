@@ -1,8 +1,8 @@
 package org.kissfarm.controller.websockets;
 
 import org.kissfarm.controller.websockets.api.StompOutboundGateway;
-import org.kissfarmops.shared.websocket.api.NodeConfigRequest;
-import org.kissfarmops.shared.websocket.api.NodeConfigResponse;
+import org.kissfarm.shared.websocket.api.NodeConfigRequest;
+import org.kissfarm.shared.websocket.api.NodeConfigResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

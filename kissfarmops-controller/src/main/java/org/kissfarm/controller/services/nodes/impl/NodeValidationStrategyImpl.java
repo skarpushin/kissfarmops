@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.kissfarm.controller.services.agent_auth_token.api.AgentAuthToken;
 import org.kissfarm.controller.services.agent_auth_token.api.AgentAuthTokenService;
 import org.kissfarm.controller.services.nodes.api.Node;
-import org.kissfarmops.shared.api.InvalidAgentAuthTokenValidationError;
+import org.kissfarm.shared.api.InvalidAgentAuthTokenValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

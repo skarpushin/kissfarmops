@@ -18,13 +18,15 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarm.agent.action_executor.api.ActionStatus;
+import org.kissfarm.agent.action_executor.api.ActionInvocationInfo;
 import org.kissfarm.agent.action_executor.api.ActionsExecutionListener;
+import org.kissfarm.agent.action_executor.api.ResumeMethod;
 import org.kissfarm.agent.process_execution.api.ProcessExecution;
 import org.kissfarm.agent.process_execution.api.ProcessExecutionCallback;
 import org.kissfarm.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarm.agent.serializer.api.DtoSerializer;
-import org.kissfarmops.shared.actions.api.ActionCommands;
+import org.kissfarm.shared.config.dto.ActionCommands;
+import org.kissfarm.shared.config.dto.ActionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

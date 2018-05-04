@@ -3,7 +3,7 @@ package org.kissfarm.controller.websockets.cfg;
 import java.util.List;
 
 import org.kissfarm.controller.security.SecurityConstantsEx;
-import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarm.shared.websocket.WebSocketCommons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,5 @@
 package org.kissfarm.agent.action_executor.api;
 
-import org.kissfarm.agent.action_executor.impl_folder.ActionInvocationInfo;
-
 /**
  * Interface used to get information about action and to invoke this action
  * 
