@@ -1,8 +1,8 @@
-package org.kissfarm.controller.websockets;
+package org.kissfarm.controller.websockets.api;
 
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
-public interface StompGate {
+public interface StompOutboundGateway {
 
 	<T extends DtoBase> void sendToUi(T payload);
 

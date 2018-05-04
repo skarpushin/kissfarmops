@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class EntryPoint {
 	public static final Logger log = LoggerFactory.getLogger(EntryPoint.class);
-	
+
 	private static ClassPathXmlApplicationContext currentApplicationContext;
 
 	public static void main(String[] args) {

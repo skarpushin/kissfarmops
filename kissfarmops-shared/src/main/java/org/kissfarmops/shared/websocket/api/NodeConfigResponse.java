@@ -1,11 +1,12 @@
-package org.kissfarmops.shared.api;
+package org.kissfarmops.shared.websocket.api;
 
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
 import lombok.Data;
 
 @Data
-public class NodeConfigResult implements DtoBase {
+public class NodeConfigResponse implements DtoBase {
 	private static final long serialVersionUID = -2985081488704932252L;
 
+	// TODO: Add information about where to get config
 }

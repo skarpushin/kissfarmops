@@ -14,7 +14,8 @@ import org.summerb.approaches.springmvc.security.SecurityConstants;
 @RestController
 @Secured(SecurityConstants.ROLE_USER)
 @RequestMapping(path = "/rest/api/v1/agent-auth-token")
-public class AgentAuthTokenRestController extends EasyCrudRestControllerBase<String, AgentAuthToken, AgentAuthTokenService> {
+public class AgentAuthTokenRestController
+		extends EasyCrudRestControllerBase<String, AgentAuthToken, AgentAuthTokenService> {
 	@Autowired
 	private AgentAuthTokenAuthStrategy authStrategy;
 

@@ -48,9 +48,9 @@ public class NodeEndPointRestController {
 	private SecurityContextResolver<User> securityContextResolver;
 	@Autowired
 	private ElevationRunner backgroundProcessRightsElevation;
-	
+
 	// TODO: Add method to download configuration. Support resume.
-	
+
 	@PostMapping("register")
 	@Transactional // CONSIDER: maybe move to service layer?
 	public @ResponseBody LoginParams registerNode(@RequestBody NodeIdentity nodeIdentity,

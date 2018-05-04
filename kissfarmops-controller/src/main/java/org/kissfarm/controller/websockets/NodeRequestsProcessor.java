@@ -1,7 +1,8 @@
 package org.kissfarm.controller.websockets;
 
-import org.kissfarmops.shared.api.NodeConfigResult;
-import org.kissfarmops.shared.api.NodeNeedsConfig;
+import org.kissfarm.controller.websockets.api.StompOutboundGateway;
+import org.kissfarmops.shared.websocket.api.NodeConfigRequest;
+import org.kissfarmops.shared.websocket.api.NodeConfigResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class NodeRequestsProcessor {
 	@Autowired
 	private SecurityContextResolver<User> securityContextResolver;
 	@Autowired
-	private StompGate stompGate;
+	private StompOutboundGateway stompOutboundGateway;
 
 	public void handleMessage(DtoBase payload, MessageHeaders messageHeaders) {
-		log.debug("on message = {}", payload);
+		log.debug("Got message from Node. Message = {}", payload);
 
 		User user = null;
 		try {
@@ -34,13 +35,13 @@ public class NodeRequestsProcessor {
 			log.warn("Failed to resolve user", t);
 		}
 
-		if (payload instanceof NodeNeedsConfig) {
-			NodeNeedsConfig request = (NodeNeedsConfig) payload;
+		if (payload instanceof NodeConfigRequest) {
+			NodeConfigRequest request = (NodeConfigRequest) payload;
 			onNodeNeedsConfig(user.getUuid(), request);
 		}
 	}
 
-	private void onNodeNeedsConfig(String nodeId, NodeNeedsConfig request) {
-		stompGate.sendToNode(nodeId, new NodeConfigResult());
+	private void onNodeNeedsConfig(String nodeId, NodeConfigRequest request) {
+		stompOutboundGateway.sendToNode(nodeId, new NodeConfigResponse());
 	}
 }

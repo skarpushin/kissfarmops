@@ -53,7 +53,7 @@ public class WebSocketConnectionPoc {
 		StompHeaders stompHeaders = new StompHeaders();
 		ListenableFuture<StompSession> sessionFuture = stompClient.connect(url, handshakeHeaders, stompHeaders,
 				sessionHandler);
-		
+
 		// wait init
 		StompSession session = sessionFuture.get(30, TimeUnit.MINUTES);
 		// assertNotNull(session != null && session.isConnected());

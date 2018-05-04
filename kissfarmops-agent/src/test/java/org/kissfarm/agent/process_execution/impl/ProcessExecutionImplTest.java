@@ -1,6 +1,7 @@
 package org.kissfarm.agent.process_execution.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
@@ -11,7 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.kissfarm.agent.process_execution.api.ProcessExecutionCallback;
-import org.kissfarm.agent.process_execution.impl.ProcessExecutionImpl;
 
 public class ProcessExecutionImplTest {
 

@@ -9,8 +9,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.junit.Test;
 import org.kissfarm.agent.action_executor.api.ActionExecutionFactory;
 import org.kissfarm.agent.action_executor.impl_folder.ActionExecutionFactoryImpl;
-import org.kissfarm.agent.node_identity.impl.PublicIpResolverLocalIpImpl;
-import org.kissfarm.agent.node_identity.impl.SelfIdentificationActionBasedImpl;
 import org.kissfarm.agent.process_execution.api.ProcessExecutorFactory;
 import org.kissfarm.agent.process_execution.impl.ProcessExecutorFactoryImpl;
 import org.kissfarm.agent.serializer.api.DtoSerializer;

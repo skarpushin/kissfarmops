@@ -1,4 +1,4 @@
-package org.kissfarm.controller.websockets.api;
+package org.kissfarmops.shared.websocket.api;
 
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
@@ -11,8 +11,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class NodeConnectedEvent implements DtoBase {
-	private static final long serialVersionUID = -3852150126673879841L;
-	
+public class NodeDisconnectedEvent implements DtoBase {
+	private static final long serialVersionUID = -4906307147224623039L;
+
 	private String nodeId;
 }

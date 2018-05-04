@@ -1,5 +1,5 @@
 
-package org.kissfarm.controller.websockets;
+package org.kissfarm.controller.websockets.cfg;
 
 import org.kissfarm.controller.security.SecurityConstantsEx;
 import org.kissfarmops.shared.websocket.WebSocketCommons;

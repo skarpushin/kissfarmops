@@ -1,4 +1,4 @@
-package org.kissfarm.controller.websockets;
+package org.kissfarm.controller.websockets.protocol;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

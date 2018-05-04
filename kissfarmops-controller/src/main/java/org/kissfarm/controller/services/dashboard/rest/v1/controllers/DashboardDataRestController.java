@@ -13,6 +13,5 @@ import org.summerb.approaches.springmvc.security.SecurityConstants;
 @RequestMapping(path = "/rest/api/v1/dashboard")
 public class DashboardDataRestController extends ControllerBase {
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	
-	
+
 }

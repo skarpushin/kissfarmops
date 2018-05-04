@@ -73,13 +73,13 @@ KfCtrlApp.controller('NodesController', [
 			$scope.onMessage = function(message) {
 				var rowId = null;
 				var dto = JSON.parse(message.body);
-				if (message.headers.payloadType == "org.kissfarm.controller.websockets.api.NodeConnectedEvent") {
+				if (message.headers.payloadType == "org.kissfarmops.shared.websocket.api.NodeConnectedEvent") {
 					var row = findRowById(dto.nodeId);
 					if (row == null) return;
 			        $scope.$apply(function() {
 						row.online = true;
 			        });
-				} else if (message.headers.payloadType == "org.kissfarm.controller.websockets.api.NodeDisconnectedEvent") {
+				} else if (message.headers.payloadType == "org.kissfarmops.shared.websocket.api.NodeDisconnectedEvent") {
 					var row = findRowById(dto.nodeId);
 					if (row == null) return;
 			        $scope.$apply(function() {

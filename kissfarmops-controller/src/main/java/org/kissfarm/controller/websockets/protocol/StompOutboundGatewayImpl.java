@@ -1,4 +1,4 @@
-package org.kissfarm.controller.websockets;
+package org.kissfarm.controller.websockets.protocol;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -6,9 +6,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kissfarm.controller.security.SecurityConstantsEx;
-import org.kissfarm.controller.websockets.api.NodeConnectedEvent;
-import org.kissfarm.controller.websockets.api.NodeDisconnectedEvent;
+import org.kissfarm.controller.websockets.api.StompOutboundGateway;
 import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarmops.shared.websocket.api.NodeConnectedEvent;
+import org.kissfarmops.shared.websocket.api.NodeDisconnectedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,13 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 @ManagedResource
-public class StompGateImpl implements StompGate, ApplicationListener<AbstractSubProtocolEvent> {
+public class StompOutboundGatewayImpl implements StompOutboundGateway, ApplicationListener<AbstractSubProtocolEvent> {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	@Autowired
-	private EventFromNodePropagator eventFromNodePropagator;
+	private StompInboundGateway stompInboundGateway;
 
 	private AtomicInteger connections = new AtomicInteger();
 
@@ -101,8 +102,6 @@ public class StompGateImpl implements StompGate, ApplicationListener<AbstractSub
 			onSessionDisconnectEvent((SessionDisconnectEvent) eventGeneric);
 		} else if (eventGeneric instanceof SessionConnectedEvent) {
 			onSessionConnectedEvent((SessionConnectedEvent) eventGeneric);
-		} else {
-			log.debug("Unhandled WebSocket event: {}", eventGeneric);
 		}
 	}
 
@@ -148,7 +147,7 @@ public class StompGateImpl implements StompGate, ApplicationListener<AbstractSub
 	private void sendEventElevated(DtoBase payload, Authentication authentication) {
 		ElevationStrategy elevationStrategy = new ElevationStrategyAuthenticationImpl(authentication);
 		ElevationRunner elevationRunner = new ElevationRunnerImpl(elevationStrategy);
-		elevationRunner.runElevated(() -> eventFromNodePropagator.propagate(payload));
+		elevationRunner.runElevated(() -> stompInboundGateway.propagate(payload));
 	}
 
 	private UserDetailsImpl findUser(AbstractSubProtocolEvent event) {

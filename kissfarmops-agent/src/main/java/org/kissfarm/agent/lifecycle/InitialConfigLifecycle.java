@@ -1,21 +1,22 @@
 package org.kissfarm.agent.lifecycle;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import org.kissfarm.agent.client.api.StompSessionHolder;
 import org.kissfarm.agent.client.impl.StompSessionEvt;
 import org.kissfarm.agent.node_identity.api.NodeIdentityHolder;
-import org.kissfarmops.shared.api.NodeNeedsConfig;
+import org.kissfarm.agent.websocket.StompFrameHandlerPayloadTypeAware;
 import org.kissfarmops.shared.websocket.WebSocketCommons;
+import org.kissfarmops.shared.websocket.api.NodeConfigRequest;
+import org.kissfarmops.shared.websocket.api.NodeConfigResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession.Subscription;
-import org.summerb.approaches.jdbccrud.common.DtoBase;
+
+import com.google.common.eventbus.Subscribe;
 
 public class InitialConfigLifecycle implements Lifecycle {
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -52,7 +53,7 @@ public class InitialConfigLifecycle implements Lifecycle {
 			// Let Controller know we need config
 			subscription = session.getStompSession().subscribe(
 					WebSocketCommons.getServerToNodeTopic(nodeIdentityHolder.getNodeIdentity().getId()), onMessage);
-			session.send(WebSocketCommons.getNodeToServerDestination(), new NodeNeedsConfig());
+			session.send(WebSocketCommons.getNodeToServerDestination(), new NodeConfigRequest());
 
 			// TODO: Perform config download
 			// TODO: Resume download if applicable
@@ -86,25 +87,10 @@ public class InitialConfigLifecycle implements Lifecycle {
 		}
 	}
 
-	private StompFrameHandler onMessage = new StompFrameHandler() {
-		@Override
-		@SuppressWarnings("rawtypes")
-		public Type getPayloadType(StompHeaders headers) {
-			try {
-				Class clazz = Class.forName(headers.getFirst(WebSocketCommons.ATTR_PAYLOAD_TYPE));
-				if (DtoBase.class.isAssignableFrom(clazz)) {
-					return clazz;
-				} else {
-					throw new RuntimeException("Penetration attempt. Security hazard!");
-				}
-			} catch (Throwable t) {
-				throw new RuntimeException("Problem resolving payload type for " + headers, t);
-			}
-		}
-
-		@Override
-		public void handleFrame(StompHeaders headers, Object payload) {
-			log.debug("Received: {}", payload);
+	private StompFrameHandler onMessage = new StompFrameHandlerPayloadTypeAware() {
+		@Subscribe
+		public void onNodeConfigResponse(NodeConfigResponse dto) {
+			log.debug("We got our NodeConfigResponse !!! " + dto);
 			nextLifeCycle.complete(null); // TODO: Replace with transition forward
 		}
 	};

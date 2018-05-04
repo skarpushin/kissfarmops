@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 
 import org.kissfarm.controller.services.nodes.api.NodeStatus;
 import org.kissfarm.controller.services.nodes.api.NodeStatusService;
-import org.kissfarm.controller.websockets.api.NodeConnectedEvent;
-import org.kissfarm.controller.websockets.api.NodeDisconnectedEvent;
+import org.kissfarmops.shared.websocket.api.NodeConnectedEvent;
+import org.kissfarmops.shared.websocket.api.NodeDisconnectedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,7 +18,7 @@ import org.summerb.approaches.jdbccrud.common.DtoBase;
 import com.google.common.base.Predicate;
 
 /**
- * This service processes events from node and records metrics and last values
+ * This service processes events from node and puts it to DB if needed
  * 
  * @author Sergey Karpushin
  *
@@ -26,6 +26,7 @@ import com.google.common.base.Predicate;
 public class NodeEventsPersist implements InitializingBean {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
+	// TODO: Use Guava's EventBus instead of these handlers
 	private List<ConditionalConsumer<?>> handlers = new ArrayList<>();
 
 	@Autowired

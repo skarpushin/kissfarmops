@@ -24,11 +24,11 @@
     http://www.springframework.org/schema/integration/security
     http://www.springframework.org/schema/integration/security/spring-integration-security.xsd">
 
-	<bean class="org.kissfarm.controller.websockets.WebSocketConfig" />
-	<bean class="org.kissfarm.controller.websockets.WebSocketSecurityConfig" />
-	<bean id="messagingGate" class="org.kissfarm.controller.websockets.StompGateImpl" />
-	<bean class="org.kissfarm.controller.websockets.IntegrationConfig" />
-	<bean class="org.kissfarm.controller.websockets.NodeEventsReceivingGateway" />
+	<bean class="org.kissfarm.controller.websockets.cfg.WebSocketConfig" />
+	<bean class="org.kissfarm.controller.websockets.cfg.WebSocketSecurityConfig" />
+	<bean id="stompOutboundGateway" class="org.kissfarm.controller.websockets.protocol.StompOutboundGatewayImpl" />
+	<bean class="org.kissfarm.controller.websockets.cfg.IntegrationConfig" />
+	<bean class="org.kissfarm.controller.websockets.protocol.NodeToControlerMessagesForwarder" />
 
 	<!-- https://docs.spring.io/spring-integration/reference/htmlsingle/#global-channel-configuration-interceptors -->
 	<int:channel-interceptor order="-1">
@@ -36,7 +36,7 @@
 		<bean class="org.springframework.integration.security.channel.SecurityContextPropagationChannelInterceptor" />
 	</int:channel-interceptor>
 
-	<int:gateway id="eventFromNodePropagator" service-interface="org.kissfarm.controller.websockets.EventFromNodePropagator"
+	<int:gateway id="eventFromNodePropagator" service-interface="org.kissfarm.controller.websockets.protocol.StompInboundGateway"
 		default-request-channel="nodeToControllerChannel" error-channel="errorLogger" />
 
 	<int:publish-subscribe-channel id="nodeToControllerChannel" task-executor="executor" />
@@ -48,7 +48,7 @@
 	<int:service-activator input-channel="nodeToControllerChannel" ref="uiNotifier" output-channel="controllerToUi" />
 	<bean id="uiNotifier" class="org.kissfarm.controller.websockets.NodeEventsUiNotifier" />
 	<int:channel id="controllerToUi" />
-	<int:outbound-channel-adapter channel="controllerToUi" ref="messagingGate" method="sendToUi" />
+	<int:outbound-channel-adapter channel="controllerToUi" ref="stompOutboundGateway" method="sendToUi" />
 
 	<int:service-activator input-channel="nodeToControllerChannel" ref="nodeRequestsProcessor" />
 	<bean id="nodeRequestsProcessor" class="org.kissfarm.controller.websockets.NodeRequestsProcessor" />

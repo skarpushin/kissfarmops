@@ -1,4 +1,4 @@
-package org.kissfarm.controller.websockets;
+package org.kissfarm.controller.websockets.cfg;
 
 import java.util.List;
 

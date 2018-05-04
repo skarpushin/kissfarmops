@@ -1,7 +1,5 @@
 package org.kissfarm.controller.websockets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.MessageHeaders;
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
@@ -15,8 +13,10 @@ import org.summerb.approaches.jdbccrud.common.DtoBase;
  *
  */
 public class NodeEventsUiNotifier {
-	private Logger log = LoggerFactory.getLogger(getClass());
-
+	/**
+	 * @return message that will be forwarded to UI by Spring integration. See
+	 *         integration.xml
+	 */
 	public DtoBase handleMessage(DtoBase payload, MessageHeaders messageHeaders) {
 		// TODO: Filter. Send only messages useful for UI
 		return payload;
