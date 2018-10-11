@@ -212,3 +212,85 @@ function copyFields(from, to) {
 		to[field] = from[field];
 	}
 }
+
+/**
+ * This controller supposed to be sub-classed
+ */
+function DtoDialogBaseFunc($scope, $mdDialog, dialogParams, submissionStrategy, $q) {
+	$scope.submissionStrategy = submissionStrategy;
+	$scope.params = dialogParams;
+	$scope.dto = dialogParams.dto;
+
+	$scope.formState = {
+		ajax : 0,
+		lastExceptionMessage : null,
+		ve : {}
+	};
+	$scope.formState.canSubmit = function() {
+		return $scope.formState.ajax == 0;
+	};
+
+	$scope.dialogTitle = dialogParams.dialogTitle || 'Dialog';
+	$scope.submitButtonTitle = dialogParams.submitButtonTitle || msgs['action.save'];
+	$scope.cancelButtonTitle = dialogParams.cancelButtonTitle || msgs['action.cancel'];
+
+	$scope.fields = [];
+	$scope.buildFields = function() {
+		return [ {
+			title : 'Sample title',
+			name : 'formField',
+			type : "text",
+			hint : 'Optional hint',
+			isRequired : false
+		} ];
+	};
+	$scope.field = function(name) {
+		for (var i = 0; i < $scope.fields.length; i++) {
+			if ($scope.fields[i].name === name) {
+				return $scope.fields[i];
+			}
+		}
+	};
+
+	$scope.save = function() {
+		$scope.formState.ajax++;
+
+		// Now let's submit dto changes
+		$scope.submissionStrategy($scope.dto, function(err, response) {
+			$scope.formState.lastExceptionMessage = null;
+			$scope.formState.ve = {};
+
+			if (!err) {
+				return;
+			}
+
+			if (!!err.data) {
+				if (!!err.data.ve) {
+					$scope.formState.ve = err.data.ve;
+					return;
+				} else if (!!err.data.exc) {
+					$scope.formState.lastExceptionMessage = err.data.exc;
+					return;
+				} else {
+				}
+			}
+			$scope.formState.lastExceptionMessage = "Unrecognized error during call to the server. " + err;
+
+		}).then(function(response) {
+			$scope.formState.ajax--;
+			$mdDialog.hide($scope.dto);
+		}, function(err) {
+			$scope.formState.ajax--;
+		});
+	};
+
+	$scope.cancel = function() {
+		$mdDialog.cancel();
+	};
+
+	$scope.start = function() {
+		$scope.fields = $scope.buildFields();
+	};
+}
+KfCtrlApp.controller('DtoDialogBase', [ '$scope', '$mdDialog', 'dialogParams', 'submissionStrategy', '$q',
+		DtoDialogBaseFunc ]);

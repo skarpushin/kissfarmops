@@ -5,8 +5,6 @@ import org.summerb.approaches.jdbccrud.api.dto.HasAuthor;
 import org.summerb.approaches.jdbccrud.api.dto.HasId;
 import org.summerb.approaches.jdbccrud.api.dto.HasTimestamps;
 
-import lombok.Data;
-
 /**
  * Row in a table which represents a single Node.
  * 
@@ -18,7 +16,6 @@ import lombok.Data;
  * @author Sergey Karpushin
  *
  */
-@Data
 public class Node implements HasId<String>, HasAuthor, HasTimestamps {
 	private static final long serialVersionUID = 7767256629987403989L;
 
@@ -66,4 +63,95 @@ public class Node implements HasId<String>, HasAuthor, HasTimestamps {
 	 * 'True' if node should be blocked from connecting to server
 	 */
 	private boolean blocked;
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public long getCreatedAt() {
+		return createdAt;
+	}
+
+	@Override
+	public void setCreatedAt(long createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	@Override
+	public long getModifiedAt() {
+		return modifiedAt;
+	}
+
+	@Override
+	public void setModifiedAt(long modifiedAt) {
+		this.modifiedAt = modifiedAt;
+	}
+
+	@Override
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	@Override
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	@Override
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	@Override
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getAgentAuthToken() {
+		return agentAuthToken;
+	}
+
+	public void setAgentAuthToken(String agentAuthToken) {
+		this.agentAuthToken = agentAuthToken;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
+	public String getPublicIp() {
+		return publicIp;
+	}
+
+	public void setPublicIp(String publicIp) {
+		this.publicIp = publicIp;
+	}
+
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+
 }

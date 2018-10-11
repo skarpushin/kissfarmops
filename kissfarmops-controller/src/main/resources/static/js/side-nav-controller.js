@@ -48,14 +48,15 @@ KfCtrlApp.controller('SideNavController',
 
 					$scope.menuGroups.push(makeMenuGroup(msgs['term.mainFeatures'], [ 
 						makeMenuItem(msgs['term.dashboard'], '/web/dashboard', 'multiline_chart'),
-						makeMenuItem(msgs['term.agentAuthTokens'], '/web/agent-auth-token', null),
-						makeMenuItem(msgs['term.nodes'], '/web/node', null),
+						makeMenuItem(msgs['term.nodes'], '/web/node', 'computer'),
+						makeMenuItem(msgs['term.agentAuthTokens'], '/web/agent-auth-token', 'security'),
+						makeMenuItem(msgs['term.repoConfig'], '/web/farm-config', 'settings_applications'), 
 					]));
 
 					// if (currentUserRoles.indexOf('ROLE_ADMIN') >= 0) {
 					$scope.menuGroups.push(makeMenuGroup(msgs['term.administration'], [
 						makeMenuItem('Java Melody', '/monitoring'), 
-						makeMenuItem('Exceptions monitor', '/error/exc') 
+						makeMenuItem('Exceptions monitor', '/error/exc'),
 					]));
 					// }
 

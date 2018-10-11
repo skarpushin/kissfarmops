@@ -9,7 +9,7 @@ import org.summerb.approaches.jdbccrud.common.DtoBase;
  * When node-related event was discovered programmatically (i.e. see
  * {@link StompOutboundGatewayImpl}, particularly {@link SessionConnectEvent} or
  * {@link SessionDisconnectEvent}) this method can be used to post message to
- * common message flow regarding node
+ * common message flow regarding the node
  * 
  * NOTE: Impl for this interface is provided automatically by Spring. See
  * integration.xml

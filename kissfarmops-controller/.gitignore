@@ -1,2 +1,4 @@
 *.csv
 *.log*
+_git_local_repo
+_git_local_repo-staging

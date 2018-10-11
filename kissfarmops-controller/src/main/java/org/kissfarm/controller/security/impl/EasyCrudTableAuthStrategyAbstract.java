@@ -1,4 +1,4 @@
-package org.kissfarm.controller.services.agent_auth_token.impl;
+package org.kissfarm.controller.security.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.summerb.approaches.jdbccrud.api.EasyCrudTableAuthStrategy;

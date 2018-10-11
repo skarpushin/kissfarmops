@@ -4,9 +4,6 @@ import org.summerb.approaches.jdbccrud.api.dto.HasAuthor;
 import org.summerb.approaches.jdbccrud.api.dto.HasAutoincrementId;
 import org.summerb.approaches.jdbccrud.api.dto.HasTimestamps;
 
-import lombok.Data;
-
-@Data
 public class Tag<TSubjectIdType> implements HasAutoincrementId, HasAuthor, HasTimestamps {
 	private static final long serialVersionUID = 2469912795576108890L;
 
@@ -21,5 +18,71 @@ public class Tag<TSubjectIdType> implements HasAutoincrementId, HasAuthor, HasTi
 
 	private TSubjectIdType subjectId;
 	private String tag;
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public long getCreatedAt() {
+		return createdAt;
+	}
+
+	@Override
+	public void setCreatedAt(long createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	@Override
+	public long getModifiedAt() {
+		return modifiedAt;
+	}
+
+	@Override
+	public void setModifiedAt(long modifiedAt) {
+		this.modifiedAt = modifiedAt;
+	}
+
+	@Override
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	@Override
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	@Override
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	@Override
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public TSubjectIdType getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(TSubjectIdType subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
 
 }

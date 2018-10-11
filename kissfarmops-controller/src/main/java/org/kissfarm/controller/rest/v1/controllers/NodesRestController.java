@@ -29,7 +29,6 @@ public class NodesRestController extends EasyCrudRestControllerBase<String, Node
 
 	@Autowired
 	private NodeAuthStrategy authStrategy;
-
 	@Autowired
 	private NodeTagService nodeTagService;
 

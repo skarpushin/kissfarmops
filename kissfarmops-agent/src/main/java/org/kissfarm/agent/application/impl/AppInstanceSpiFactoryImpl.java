@@ -5,8 +5,8 @@ import org.kissfarm.agent.application.api.ActionFoldersResolver;
 import org.kissfarm.agent.application.api.AppInstanceSpi;
 import org.kissfarm.agent.application.api.AppInstanceSpiFactory;
 import org.kissfarm.agent.application.api.AppListener;
-import org.kissfarm.shared.config.dto.AppDefinitionConfig;
-import org.kissfarm.shared.config.dto.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefConfig;
+import org.kissfarm.shared.config.dto.AppProtoConfig;
 
 public class AppInstanceSpiFactoryImpl implements AppInstanceSpiFactory {
 	private ActionFoldersResolver actionFoldersResolver;
@@ -20,8 +20,8 @@ public class AppInstanceSpiFactoryImpl implements AppInstanceSpiFactory {
 	}
 
 	@Override
-	public AppInstanceSpi build(String version, AppDefinitionConfig definitionConfig,
-			AppPrototypeConfig prototypeConfig, AppListener appListener) {
+	public AppInstanceSpi build(String version, AppDefConfig definitionConfig, AppProtoConfig prototypeConfig,
+			AppListener appListener) {
 
 		return new AppInstanceSpiImpl(version, definitionConfig, prototypeConfig, appListener, actionFoldersResolver,
 				actionExecutionFactory);

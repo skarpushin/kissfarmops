@@ -27,6 +27,7 @@ public class IndexController extends ControllerBase {
 	public static final String DASHBOARD_ROOT = "/web/dashboard";
 	public static final String PATH_AGENT_AUTH_TOKENS = "/web/agent-auth-token";
 	public static final String PATH_NODES = "/web/node";
+	private static final String PATH_FARM_CONFIG = "/web/farm-config";
 
 	@Autowired
 	private SecurityContextResolver<User> securityContextResolver;
@@ -70,5 +71,11 @@ public class IndexController extends ControllerBase {
 	@GetMapping(value = PATH_NODES)
 	public String nodesTable() {
 		return PATH_NODES;
+	}
+
+	@Secured(SecurityConstants.ROLE_USER)
+	@GetMapping(value = PATH_FARM_CONFIG)
+	public String farmConfig() {
+		return PATH_FARM_CONFIG;
 	}
 }

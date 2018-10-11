@@ -1,0 +1,31 @@
+<md-dialog>
+<form name="form" ng-cloak>
+	<md-toolbar
+		ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-toolbar.tmpl.html'">
+	</md-toolbar>
+	<md-dialog-content>
+	<div class="md-dialog-content">
+		<div layout="column">
+			<div layout-gt-sm="row">
+				<crud-input-text name="uri" class="md-block" flex-gt-sm></crud-input-text>
+			</div>
+			<div layout-gt-sm="row">
+				<crud-input-text name="branch" class="md-block" flex-gt-sm></crud-input-text>
+			</div>
+
+			<div layout-gt-sm="row">
+				<crud-input-text name="user" class="md-block" flex-gt-sm></crud-input-text>
+			 	 <div flex="5" hide-xs hide-sm></div>
+				<crud-input-text name="password" class="md-block" flex-gt-sm></crud-input-text>
+			</div>
+		</div>
+		
+		<div class="md-padding error"
+			ng-show="!!formState.lastExceptionMessage">{{ formState.lastExceptionMessage }}</div>
+	</div>
+	</md-dialog-content>
+	<md-dialog-actions layout="row"
+		ng-include="staticResourcesBase + '/static/templates/crud/form-dialog-actions.tmpl.html'">
+	</md-dialog-actions>
+</form>
+</md-dialog>

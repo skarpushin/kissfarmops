@@ -6,7 +6,7 @@ CREATE TABLE `agent_auth_tokens` (
   `created_by` CHAR(36) NOT NULL ,
   `modified_by` CHAR(36) NOT NULL ,
   
-  `comment` VARCHAR(128) NOT NULL,
+  `comment` VARCHAR(128) NULL,
   `enabled` BIT DEFAULT 1 NOT NULL,
   
   PRIMARY KEY (`id`),

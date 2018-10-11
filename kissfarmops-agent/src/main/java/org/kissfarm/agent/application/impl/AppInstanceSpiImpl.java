@@ -16,8 +16,8 @@ import org.kissfarm.agent.application.api.AppInstanceSpi;
 import org.kissfarm.agent.application.api.AppListener;
 import org.kissfarm.shared.config.dto.ActionConfig;
 import org.kissfarm.shared.config.dto.ActionStatus;
-import org.kissfarm.shared.config.dto.AppDefinitionConfig;
-import org.kissfarm.shared.config.dto.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefConfig;
+import org.kissfarm.shared.config.dto.AppProtoConfig;
 import org.kissfarm.shared.config.dto.EnvVars;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,8 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 	private static Logger log = LoggerFactory.getLogger(AppInstanceSpiImpl.class);
 
 	private String version;
-	private AppDefinitionConfig definitionConfig;
-	private AppPrototypeConfig prototypeConfig;
+	private AppDefConfig definitionConfig;
+	private AppProtoConfig prototypeConfig;
 	private ActionFoldersResolver actionFoldersResolver;
 	private AppListener appListener;
 	private ActionExecutionFactory actionExecutionFactory;
@@ -51,7 +51,7 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 	private List<Runnable> callAfterAllActionsComplete = new LinkedList<>();
 	private volatile boolean suspending;
 
-	public AppInstanceSpiImpl(String version, AppDefinitionConfig definitionConfig, AppPrototypeConfig prototypeConfig,
+	public AppInstanceSpiImpl(String version, AppDefConfig definitionConfig, AppProtoConfig prototypeConfig,
 			AppListener appListener, ActionFoldersResolver actionFoldersResolver,
 			ActionExecutionFactory actionExecutionFactory) {
 		this.actionExecutionFactory = actionExecutionFactory;
@@ -154,12 +154,12 @@ public class AppInstanceSpiImpl implements AppInstanceSpi {
 	}
 
 	@Override
-	public AppDefinitionConfig getAppDefinitionConfig() {
+	public AppDefConfig getAppDefinitionConfig() {
 		return definitionConfig;
 	}
 
 	@Override
-	public AppPrototypeConfig getAppPrototypeConfig() {
+	public AppProtoConfig getAppPrototypeConfig() {
 		return prototypeConfig;
 	}
 

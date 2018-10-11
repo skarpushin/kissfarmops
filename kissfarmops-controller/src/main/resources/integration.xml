@@ -42,14 +42,18 @@
 	<int:publish-subscribe-channel id="nodeToControllerChannel" task-executor="executor" />
 	<task:executor id="executor" pool-size="10" />
 
+	<!-- This listener will pay attention to no online/offline status -->
 	<int:service-activator input-channel="nodeToControllerChannel" ref="nodeMetricsRecorder" />
 	<bean id="nodeMetricsRecorder" class="org.kissfarm.controller.websockets.NodeEventsPersist" />
 
+	<!-- This construct here will forward messages to the UI -->
+	<!-- TODO: FIlter messages, don't forward just everything -->
 	<int:service-activator input-channel="nodeToControllerChannel" ref="uiNotifier" output-channel="controllerToUi" />
 	<bean id="uiNotifier" class="org.kissfarm.controller.websockets.NodeEventsUiNotifier" />
 	<int:channel id="controllerToUi" />
 	<int:outbound-channel-adapter channel="controllerToUi" ref="stompOutboundGateway" method="sendToUi" />
 
+	<!-- That's actually a request processor, that will do some sensile work -->
 	<int:service-activator input-channel="nodeToControllerChannel" ref="nodeRequestsProcessor" />
 	<bean id="nodeRequestsProcessor" class="org.kissfarm.controller.websockets.NodeRequestsProcessor" />
 

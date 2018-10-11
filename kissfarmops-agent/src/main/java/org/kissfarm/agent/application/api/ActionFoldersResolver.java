@@ -1,7 +1,7 @@
 package org.kissfarm.agent.application.api;
 
-import org.kissfarm.shared.config.dto.AppDefinitionConfig;
-import org.kissfarm.shared.config.dto.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefConfig;
+import org.kissfarm.shared.config.dto.AppProtoConfig;
 
 /**
  * Abstraction for resolving folders locations
@@ -10,9 +10,7 @@ import org.kissfarm.shared.config.dto.AppPrototypeConfig;
  *
  */
 public interface ActionFoldersResolver {
-	String resolveInstanceFolder(AppDefinitionConfig appDefinitionConfig, AppPrototypeConfig appPrototypeConfig,
-			String actionName);
+	String resolveInstanceFolder(AppDefConfig appDefConfig, AppProtoConfig appProtoConfig, String actionName);
 
-	String resolveScriptsFolder(AppDefinitionConfig appDefinitionConfig, AppPrototypeConfig appPrototypeConfig,
-			String actionName);
+	String resolveScriptsFolder(AppDefConfig appDefConfig, AppProtoConfig appProtoConfig, String actionName);
 }

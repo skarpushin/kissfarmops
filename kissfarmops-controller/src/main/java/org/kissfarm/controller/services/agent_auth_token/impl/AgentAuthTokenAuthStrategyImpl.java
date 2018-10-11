@@ -3,6 +3,7 @@ package org.kissfarm.controller.services.agent_auth_token.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kissfarm.controller.security.impl.EasyCrudTableAuthStrategyAbstract;
 import org.summerb.approaches.security.api.exceptions.NotAuthorizedException;
 import org.summerb.approaches.springmvc.security.SecurityConstants;
 

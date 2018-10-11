@@ -3,8 +3,8 @@ package org.kissfarm.agent.application.api;
 import java.util.Map;
 
 import org.kissfarm.agent.action_executor.api.ActionExecutionSpi;
-import org.kissfarm.shared.config.dto.AppDefinitionConfig;
-import org.kissfarm.shared.config.dto.AppPrototypeConfig;
+import org.kissfarm.shared.config.dto.AppDefConfig;
+import org.kissfarm.shared.config.dto.AppProtoConfig;
 
 /**
  * SPI for interracting with 1 application of a particular version
@@ -15,9 +15,9 @@ import org.kissfarm.shared.config.dto.AppPrototypeConfig;
 public interface AppInstanceSpi {
 	String getVersion();
 
-	AppDefinitionConfig getAppDefinitionConfig();
+	AppDefConfig getAppDefinitionConfig();
 
-	AppPrototypeConfig getAppPrototypeConfig();
+	AppProtoConfig getAppPrototypeConfig();
 
 	/**
 	 * This method will instruct {@link AppInstanceSpi} to callback when no action

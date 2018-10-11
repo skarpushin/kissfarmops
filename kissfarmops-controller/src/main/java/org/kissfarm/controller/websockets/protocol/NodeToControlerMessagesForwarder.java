@@ -10,6 +10,8 @@ import org.summerb.approaches.jdbccrud.common.DtoBase;
 
 /**
  * This Controller will get messages from STOMP and forward it to Integration
+ * context using {@link StompInboundGateway} (which is automatically impl by
+ * Spring-generated proxy)
  * 
  * @author Sergey Karpushin
  *

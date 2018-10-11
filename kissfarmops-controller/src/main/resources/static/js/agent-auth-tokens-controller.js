@@ -52,7 +52,7 @@ KfCtrlApp.controller('AgentAuthTokenFormController', [ '$scope', '$mdDialog', '$
 					title : msgs['term.comment'],
 					name : 'comment',
 					type : "text",
-					isRequired : true
+					isRequired : false
 				}, {
 					title : msgs['term.enabled'],
 					name : 'enabled',

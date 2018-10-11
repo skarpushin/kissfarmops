@@ -74,6 +74,7 @@ public class RegistrationLifecycle extends LifecycleSyncBase implements Controll
 					ie);
 		}
 
+		controllerConnection.assertLogin(result.getLoginParams());
 		return wsConnectLifecycle;
 	}
 

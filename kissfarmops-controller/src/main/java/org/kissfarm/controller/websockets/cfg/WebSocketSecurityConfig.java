@@ -29,7 +29,7 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 		// listen to other channels
 
 		// TODO: Correctly restrict workflow managers activity - allow to listen
-		// certain channels and don';t allow to write to certain channels'
+		// certain channels and don't allow to write to certain channels'
 	}
 
 }

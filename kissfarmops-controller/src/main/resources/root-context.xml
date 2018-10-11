@@ -26,7 +26,7 @@
 			<list>
 				<!-- Default configuration values -->
 				<value>classpath:application.properties</value>
-				<value>classpath:application-override-*.properties</value>
+				<value>file:application-override-*.properties</value>
 				<!-- Deployment-specific configuration values that override defaults -->
 				<value>file:/opt/kf-ctrl/conf/kf-ctrl.properties</value>
 			</list>

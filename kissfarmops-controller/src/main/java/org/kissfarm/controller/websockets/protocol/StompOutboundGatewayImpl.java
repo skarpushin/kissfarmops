@@ -121,7 +121,7 @@ public class StompOutboundGatewayImpl implements StompOutboundGateway, Applicati
 		connections.decrementAndGet();
 
 		String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
-		removeSubscriptionsFroSession(sessionId);
+		removeSubscriptionsForSession(sessionId);
 		log.debug("WebSocket session {} disconnected", sessionId);
 
 		UserDetailsImpl user = findUser(event);
@@ -182,12 +182,12 @@ public class StompOutboundGatewayImpl implements StompOutboundGateway, Applicati
 		String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
 
 		// TODO: Clarify what channel was unsubscribed.
-		removeSubscriptionsFroSession(sessionId);
+		removeSubscriptionsForSession(sessionId);
 
 		log.debug("WebSocket session {} unsubscribed", sessionId);
 	}
 
-	private void removeSubscriptionsFroSession(String sessionId) {
+	private void removeSubscriptionsForSession(String sessionId) {
 		synchronized (subscriptionsToSessions) {
 			if (!subscriptionsToSessions.containsValue(sessionId)) {
 				return;

@@ -40,12 +40,8 @@ public class WebSocketCommons {
 		return NTOS;
 	}
 
-	public static String getNodeToServerMapping() {
-		return NTOS_REQUESTS;
-	}
-
 	public static String getNodeToServerDestination() {
-		return NTOS + NTOS_REQUESTS;
+		return getNodeToServerBasePath() + NTOS_REQUESTS;
 	}
 
 	public static String buildServerToNodeTopic(String nodeId) {
