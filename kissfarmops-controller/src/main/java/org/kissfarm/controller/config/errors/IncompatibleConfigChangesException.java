@@ -1,4 +1,4 @@
-package org.kissfarm.controller.config.api;
+package org.kissfarm.controller.config.errors;
 
 import org.summerb.approaches.i18n.HasMessageArgsConverters;
 import org.summerb.approaches.i18n.MessageArgConverter;

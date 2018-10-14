@@ -60,6 +60,7 @@ CREATE TABLE `node_status` (
   `created_at` BIGINT NOT NULL ,
   `modified_at` BIGINT NOT NULL ,
   `online` BIT NOT NULL,
+  `version` VARCHAR(36) NULL ,
   
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)

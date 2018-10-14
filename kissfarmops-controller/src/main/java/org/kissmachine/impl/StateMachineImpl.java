@@ -86,8 +86,8 @@ public class StateMachineImpl
 		future.whenComplete(this); // "this" as a (BiConsumer<SmTransitionToState, Throwable>)
 	}
 
-	// TODO: Wrap it somehow in a transactional context
-	// TODO: Also set security context OR expect caller to be responsible for that
+	// TBD: Wrap it somehow in a transactional context WHEN called from alternative thread
+	// TBD: Also set security context OR expect caller to be responsible for that
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
 	public void accept(SmTransitionToState result, Throwable exc) {
@@ -109,7 +109,7 @@ public class StateMachineImpl
 	}
 
 	/**
-	 * TODO: This is a VERY dangerous place. If this method fails, state machine
+	 * TBD: This is a VERY dangerous place. If this method fails, state machine
 	 * basically dies. We need to figure out how to recover in case of horrible
 	 * failure
 	 */

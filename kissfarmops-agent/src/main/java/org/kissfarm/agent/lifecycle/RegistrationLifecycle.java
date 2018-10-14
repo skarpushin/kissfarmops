@@ -48,7 +48,9 @@ public class RegistrationLifecycle extends LifecycleSyncBase implements Controll
 
 		if (result.getLoginParams() != null) {
 			try {
+				log.debug("We seem to already have login info. Logging in...");
 				controllerConnection.assertLogin(result.getLoginParams());
+				log.debug("We're in");
 				return wsConnectLifecycle;
 			} catch (Throwable t) {
 				FieldValidationException fve = ExceptionUtils.findExceptionOfType(t, FieldValidationException.class);
@@ -62,6 +64,7 @@ public class RegistrationLifecycle extends LifecycleSyncBase implements Controll
 		}
 
 		// ok. If we're here it means we need to register
+		log.debug("Registering...");
 		Preconditions.checkState(StringUtils.hasText(result.getAuthToken()),
 				"ControllerConnectionInfo.authToken required for registration");
 		LoginParams obtainedPassword = controllerConnection.register(nodeIdentityHolder.getNodeIdentity(),
@@ -74,7 +77,9 @@ public class RegistrationLifecycle extends LifecycleSyncBase implements Controll
 					ie);
 		}
 
+		log.debug("Logging in...");
 		controllerConnection.assertLogin(result.getLoginParams());
+		log.debug("We're in");
 		return wsConnectLifecycle;
 	}
 

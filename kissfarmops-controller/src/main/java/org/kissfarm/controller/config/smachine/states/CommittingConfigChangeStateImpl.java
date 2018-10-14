@@ -8,21 +8,18 @@ import org.kissmachine.api.dto.SmStateData;
 import org.kissmachine.api.machine.SmTransitionToState;
 import org.kissmachine.api.machine.StateMachine;
 import org.kissmachine.api.state.SmStateKind;
-import org.kissmachine.impl.state.SmStateAbstract;
 import org.kissmachine.impl.state.Void2;
 import org.springframework.messaging.Message;
 
-public class CommittingConfigChangeStateImpl extends SmStateAbstract<Void2, Void2, Void2, FarmConfigMachineVariables> {
+public class CommittingConfigChangeStateImpl extends FarmConfigStateAbstract<Void2, Void2, Void2, FarmConfigMachineVariables> {
 	public static final String NAME = "CommittingConfigChange";
-
-	// TODO: Ask all nodes to switch to new config
-	// TODO: Wait for notifications from all nodes
 
 	@Override
 	protected SmTransitionToState handleInitStateAction(Message<SmStateData> message, StateMachine stateMachine) {
 		super.handleInitStateAction(message, stateMachine);
 
-		// TODO: Impl
+		// TBD: Notify nodes
+		
 		if (vars().getActiveWorkTree() != null) {
 			FileUtils.deleteQuietly(new File(vars().getActiveWorkTree()));
 		}

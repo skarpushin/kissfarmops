@@ -19,4 +19,6 @@ public interface ControllerConnection {
 	void assertLogin(LoginParams loginParams);
 
 	String findSessionId();
+
+	void downloadFile(String relativeUrl, String targetFile);
 }

@@ -339,16 +339,12 @@ public class ActionExecutionSpiImplTest {
 		assertEquals(ActionStatus.Timedout, f.getStatus());
 	}
 
-	// TODO: Test suspension of action - invocation timeout watch dog
-
-	// TODO: Test suspension of action - status check delay
-
-	// TODO: Test suspension of action - status check exit code
-
-	// TODO: Test suspension of action - status check timeout watch dog
-
-	// TODO: Test reconcile of async action
-
-	// TODO: Test reconcile of horribly failed action (like we started a process and
+	// TBD: I thought I've implenented this already. Double-check
+	// TBD: Test suspension of action - invocation timeout watch dog
+	// TBD: Test suspension of action - status check delay
+	// TBD: Test suspension of action - status check exit code
+	// TBD: Test suspension of action - status check timeout watch dog
+	// TBD: Test reconcile of async action
+	// TBD: Test reconcile of horribly failed action (like we started a process and
 	// everything died)
 }

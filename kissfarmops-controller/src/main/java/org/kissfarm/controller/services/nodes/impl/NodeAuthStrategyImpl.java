@@ -66,7 +66,7 @@ public class NodeAuthStrategyImpl implements NodeAuthStrategy {
 	public Map<String, Boolean> resolvePermissions() {
 		boolean isUser = securityContextResolver.hasRole(SecurityConstants.ROLE_USER);
 		Map<String, Boolean> ret = new HashMap<>();
-		ret.put("create", true); // TODO: Change it to false
+		ret.put("create", true);
 		ret.put("read", isUser);
 		ret.put("update", isUser);
 		ret.put("delete", isUser);

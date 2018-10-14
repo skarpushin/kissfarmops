@@ -3,17 +3,16 @@ package org.kissfarm.controller.config.smachine.states;
 import java.io.File;
 import java.util.Locale;
 
-import org.kissfarm.controller.config.api.FarmConfig;
 import org.kissfarm.controller.config.api.FarmConfigFolderReader;
 import org.kissfarm.controller.config.api.GitAbstraction;
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.FarmConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
 import org.kissfarm.controller.config.impl.FarmConfigTools;
 import org.kissfarm.controller.config.smachine.dtos.FarmConfigMachineVariables;
 import org.kissmachine.api.dto.SmStateData;
 import org.kissmachine.api.machine.SmTransitionToState;
 import org.kissmachine.api.machine.StateMachine;
 import org.kissmachine.api.state.SmStateKind;
-import org.kissmachine.impl.state.SmStateAbstract;
 import org.kissmachine.impl.state.Void2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -30,7 +29,7 @@ import com.google.common.base.Preconditions;
  * @author Sergey Karpushin
  *
  */
-public class ChangingRepoStateImpl extends SmStateAbstract<GitConfig, Void2, Void2, FarmConfigMachineVariables> {
+public class ChangingRepoStateImpl extends FarmConfigStateAbstract<GitConfig, Void2, Void2, FarmConfigMachineVariables> {
 	public static final String NAME = "ChangingRepo";
 
 	@Autowired

@@ -2,6 +2,8 @@ package org.kissfarm.controller.config.api;
 
 import java.io.File;
 
+import org.kissfarm.controller.config.dto.FarmConfig;
+
 /**
  * Strategy to read FarmConfig from a folder
  * 
@@ -11,5 +13,7 @@ import java.io.File;
 public interface FarmConfigFolderReader {
 
 	FarmConfig readFarmConfig(File dir, String version);
+
+	File buildAppDefDirByAppName(File farmConfigDir, String appDefName);
 
 }

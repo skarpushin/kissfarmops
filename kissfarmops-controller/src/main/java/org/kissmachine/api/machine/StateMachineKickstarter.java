@@ -15,8 +15,8 @@ import org.kissmachine.api.dto.SmData;
 public interface StateMachineKickstarter {
 
 	/**
-	 * @param initialStateParams machine input parameters
-	 * @param machineVars        TODO
+	 * @param initialStateParams machine input parameters (params of initial state)
+	 * @param machineVars        state machine variables
 	 * @return Machine ID
 	 * @throws IllegalStateException if machine is in terminal state or already
 	 *                               running

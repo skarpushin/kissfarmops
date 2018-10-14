@@ -180,10 +180,7 @@ public class StompOutboundGatewayImpl implements StompOutboundGateway, Applicati
 
 	private void onSessionUnsubscribeEvent(SessionUnsubscribeEvent event) {
 		String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
-
-		// TODO: Clarify what channel was unsubscribed.
 		removeSubscriptionsForSession(sessionId);
-
 		log.debug("WebSocket session {} unsubscribed", sessionId);
 	}
 

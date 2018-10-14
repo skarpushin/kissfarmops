@@ -1,6 +1,6 @@
 package org.kissfarm.controller.config.smachine.dtos;
 
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
 public class FarmConfigMachineVariables implements DtoBase {
@@ -8,7 +8,7 @@ public class FarmConfigMachineVariables implements DtoBase {
 
 	public static final String MACHINE_TYPE = "FarmConfig";
 
-	// TODO: Security concern. This data will be stored as-is in the database. Given
+	// TBD: Security concern. This data will be stored as-is in the database. Given
 	// the actual intended use it shouldn't be a huge problem, but still it's a
 	// legitimate security concern
 	private GitConfig gitConfig;

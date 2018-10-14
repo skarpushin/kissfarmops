@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Base class for Lifecycle which will attempt to accompliosh task again and
+ * Base class for Lifecycle which will attempt to accomplish task again and
  * again
  * 
  * @author Sergey Karpushin

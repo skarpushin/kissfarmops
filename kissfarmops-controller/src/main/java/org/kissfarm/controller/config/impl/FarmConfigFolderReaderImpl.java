@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.kissfarm.controller.config.api.FarmConfig;
 import org.kissfarm.controller.config.api.FarmConfigFolderReader;
-import org.kissfarm.controller.config.api.TagsToAppsMapping;
+import org.kissfarm.controller.config.dto.FarmConfig;
+import org.kissfarm.controller.config.dto.TagsToAppsMapping;
 import org.kissfarm.shared.api.AppDefFolderReader;
 import org.kissfarm.shared.config.dto.AppDefConfig;
 import org.kissfarm.shared.impl.AppDefFolderReaderImpl;
@@ -46,6 +46,12 @@ public class FarmConfigFolderReaderImpl implements FarmConfigFolderReader {
 		} catch (Throwable t) {
 			throw new RuntimeException("Failed to read Farm Config from clonned repo", t);
 		}
+	}
+
+	@Override
+	public File buildAppDefDirByAppName(File farmConfigDir, String appDefName) {
+		return new File(
+				farmConfigDir.getAbsoluteFile() + File.separator + AppDefFolderReaderImpl.PREFIX_APP + appDefName);
 	}
 
 	protected Map<String, AppDefConfig> readAppDefinitions(File stagingDir) {

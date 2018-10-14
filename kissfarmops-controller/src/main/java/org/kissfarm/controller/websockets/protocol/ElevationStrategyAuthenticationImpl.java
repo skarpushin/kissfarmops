@@ -15,7 +15,7 @@ public class ElevationStrategyAuthenticationImpl implements ElevationStrategy {
 
 	@Override
 	public boolean isElevationRequired() {
-		// TODO: Check if current user matches requested user then elevation not
+		// TBD-IMPROVE: Check if current user matches requested user then elevation not
 		// requried
 		return true;
 	}

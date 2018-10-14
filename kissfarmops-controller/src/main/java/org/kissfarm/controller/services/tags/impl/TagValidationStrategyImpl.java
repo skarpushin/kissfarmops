@@ -19,7 +19,5 @@ public class TagValidationStrategyImpl<TSubjectType> extends EasyCrudValidationS
 		if (ctx.validateNotEmpty(dto.getTag(), Tag.FN_TAG)) {
 			ctx.validateDataLengthLessOrEqual(dto.getTag(), tagSize, Tag.FN_TAG);
 		}
-
-		// TODO: Do we need to validate subjectId ?...
 	}
 }

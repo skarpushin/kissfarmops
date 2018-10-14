@@ -5,9 +5,11 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 
 import org.kissfarm.controller.config.api.FarmConfigFolderReader;
+import org.kissfarm.controller.config.api.FarmConfigPackager;
 import org.kissfarm.controller.config.api.GitAbstraction;
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
 import org.kissfarm.controller.config.impl.FarmConfigFolderReaderImpl;
+import org.kissfarm.controller.config.impl.FarmConfigPackagerImpl;
 import org.kissfarm.controller.config.impl.GitAbstractionImpl;
 import org.kissfarm.controller.config.impl.GitConfigValidationStrategyImpl;
 import org.kissfarm.controller.config.smachine.dtos.FarmConfigMachineVariables;
@@ -207,6 +209,11 @@ public class FarmConfigSpringConfig {
 	@Bean
 	public FarmConfigFolderReader farmConfigFolderReader() {
 		return new FarmConfigFolderReaderImpl();
+	}
+
+	@Bean
+	public FarmConfigPackager farmConfigPackager(@Value("${farmConfig.packagesFolder}") String packagesFolder) {
+		return new FarmConfigPackagerImpl(packagesFolder);
 	}
 
 	public String getWorkingPath() {

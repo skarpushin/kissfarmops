@@ -34,6 +34,7 @@
 			        <th md-column md-order-by="publicIp" hide-xs hide-sm hide-md show-gt-md><s:message code="term.publicIp" /></th>
 			        <th md-column><span><s:message code="term.nodeTags" /></span></th>
 			        <th md-column md-order-by="online" hide-xs hide-sm hide-md show-gt-md><s:message code="term.online" /></th>
+			        <th md-column md-order-by="online" hide-xs hide-sm hide-md show-gt-md><s:message code="term.version" /></th>
 			      </tr>
 			    </thead>
 			    <tbody md-body>
@@ -46,6 +47,7 @@
 			        <td md-cell hide-xs hide-sm hide-md show-gt-md>{{row.publicIp}}</td>
 			        <td md-cell hide-xs hide-sm hide-md show-gt-md>{{row.tags}}</td>
 			        <td md-cell hide-xs hide-sm hide-md show-gt-md><i ng-show="row.online" class="material-icons">check_circle</i></td>
+			        <td md-cell hide-xs hide-sm hide-md show-gt-md>{{row.version}}</td>
 			      </tr>
 			    </tbody>
 			  </table>

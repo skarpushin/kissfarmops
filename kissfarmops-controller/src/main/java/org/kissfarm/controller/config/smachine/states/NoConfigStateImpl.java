@@ -1,12 +1,11 @@
 package org.kissfarm.controller.config.smachine.states;
 
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
 import org.kissfarm.controller.config.smachine.dtos.FarmConfigMachineVariables;
 import org.kissmachine.api.dto.SmStateData;
 import org.kissmachine.api.machine.SmTransitionToState;
 import org.kissmachine.api.machine.StateMachine;
 import org.kissmachine.api.state.SmStateKind;
-import org.kissmachine.impl.state.SmStateAbstract;
 import org.kissmachine.impl.state.Void2;
 import org.springframework.messaging.Message;
 
@@ -17,7 +16,7 @@ import org.springframework.messaging.Message;
  * @author Sergey Karpushin
  *
  */
-public class NoConfigStateImpl extends SmStateAbstract<Void2, Void2, GitConfig, FarmConfigMachineVariables> {
+public class NoConfigStateImpl extends FarmConfigStateAbstract<Void2, Void2, GitConfig, FarmConfigMachineVariables> {
 	public static final String NAME = "noConfig";
 
 	public NoConfigStateImpl() {

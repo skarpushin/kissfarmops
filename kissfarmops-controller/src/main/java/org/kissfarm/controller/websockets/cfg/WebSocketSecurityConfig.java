@@ -25,10 +25,10 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 				.simpSubscribeDestMatchers(WebSocketCommons.getServerToNodeTopic() + "/**")
 				.hasRole(SecurityConstantsEx.NODE).anyMessage().authenticated();
 
-		// TODO: Allow node to subscribe only to it's personal channel, don't allow to
+		// TBD: Allow node to subscribe only to it's personal channel, don't allow to
 		// listen to other channels
 
-		// TODO: Correctly restrict workflow managers activity - allow to listen
+		// TBD: Correctly restrict workflow managers activity - allow to listen
 		// certain channels and don't allow to write to certain channels'
 	}
 

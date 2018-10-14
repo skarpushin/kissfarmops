@@ -50,6 +50,9 @@ public class StompSessionEvt {
 
 	public void addConnectionLostListener(Consumer<StompSessionEvt> runnable) {
 		connectionLostListeners.add(runnable);
+		if (!isConnected()) {
+			runnable.accept(this);
+		}
 	}
 
 	public void removeConnectionLostListener(Consumer<StompSessionEvt> runnable) {

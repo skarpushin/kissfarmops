@@ -1,6 +1,6 @@
-package org.kissfarm.controller.config.impl;
+package org.kissfarm.controller.config.errors;
 
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
 import org.summerb.approaches.validation.ValidationError;
 
 public class GitConfigValidationError extends ValidationError {

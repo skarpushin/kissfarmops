@@ -10,6 +10,7 @@ public class NodeStatus implements HasId<String>, HasTimestamps {
 	private long createdAt;
 	private long modifiedAt;
 	private boolean online;
+	private String version;
 
 	@Override
 	public String getId() {
@@ -47,6 +48,14 @@ public class NodeStatus implements HasId<String>, HasTimestamps {
 
 	public void setOnline(boolean online) {
 		this.online = online;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 }

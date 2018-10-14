@@ -70,6 +70,7 @@
 
 	<bean id="absoluteUrlBuilder" class="org.summerb.approaches.springmvc.utils.AbsoluteUrlBuilderDefaultImpl" />
 	<bean id="securityActionsUrlsProvider" class="org.summerb.approaches.springmvc.security.mvc.SecurityActionsUrlsProviderDefaultImpl" />
+	<bean class="org.kissfarm.shared.impl.CompressorTarGzImpl" />
 
 	<bean id="facadeMonitoringAdvisor" class="net.bull.javamelody.MonitoringSpringAdvisor">
 		<property name="pointcut">

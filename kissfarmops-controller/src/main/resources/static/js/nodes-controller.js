@@ -45,7 +45,8 @@ KfCtrlApp.controller('NodesController', [
 			}));
 			$scope.rowEnrichers.push(OneToOneReferencesRowEnricher("nodeStatus", function(initiatorRow, referencedRow) {
 				return {
-					online: referencedRow.online
+					online: referencedRow.online,
+					version: referencedRow.version
 				};
 			}));
 			

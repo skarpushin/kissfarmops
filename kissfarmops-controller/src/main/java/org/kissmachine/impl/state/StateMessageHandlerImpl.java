@@ -12,7 +12,6 @@ public class StateMessageHandlerImpl<T> implements StateMessageHandler<T> {
 	public StateMessageHandlerImpl(Class<T> payloadClazz, Function<Message<T>, SmTransitionToState> handler) {
 		this.payloadClazz = payloadClazz;
 		this.handler = handler;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.kissfarm.controller.config.smachine.dtos;
+package org.kissfarm.shared.config.dto;
 
 import org.summerb.approaches.jdbccrud.common.DtoBase;
 
@@ -13,6 +13,15 @@ public class NodeNowUsesConfigReport implements DtoBase {
 
 	private String nodeId;
 	private String version;
+
+	public NodeNowUsesConfigReport() {
+	}
+
+	public NodeNowUsesConfigReport(String nodeId, String version) {
+		super();
+		this.nodeId = nodeId;
+		this.version = version;
+	}
 
 	public String getNodeId() {
 		return nodeId;

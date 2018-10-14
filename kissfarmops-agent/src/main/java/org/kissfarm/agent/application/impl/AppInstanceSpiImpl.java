@@ -29,7 +29,7 @@ import com.google.common.base.Preconditions;
  * Instance of this calss is to represent an application of certain version of
  * the configuration
  * 
- * TODO: 1 thing I don't like about this impl it's tied to an idea that action
+ * THINK: One thing I don't like about this impl it's tied to an idea that action
  * has to happen in files system. It would be nice to refactor it some day so
  * that actions could be embedded and handled by the agent itself
  * 

@@ -13,18 +13,22 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kissfarm.controller.config.api.FarmConfig;
 import org.kissfarm.controller.config.api.FarmConfigFolderReader;
+import org.kissfarm.controller.config.api.FarmConfigPackager;
 import org.kissfarm.controller.config.api.GitAbstraction;
-import org.kissfarm.controller.config.api.GitConfig;
-import org.kissfarm.shared.api.ZipUtils;
-import org.kissfarm.shared.impl.ZipUtilsImpl;
+import org.kissfarm.controller.config.dto.FarmConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
+import org.kissfarm.shared.api.Compressor;
+import org.kissfarm.shared.impl.CompressorZipImpl;
 
 import com.google.common.io.Files;
 
+import net.lingala.zip4j.core.ZipFile;
+
 public class FarmConfigSmokeTest {
 	private List<File> filesToBeDeleted = new LinkedList<>();
-	private ZipUtils zipUtils = new ZipUtilsImpl();
+	private Compressor zipUtils = new CompressorZipImpl();
+	private FarmConfigPackager farmConfigPackager = new FarmConfigPackagerImpl(createTempDir().getAbsolutePath());
 
 	@Before
 	public void beforeEachTest() {
@@ -35,6 +39,36 @@ public class FarmConfigSmokeTest {
 		while (filesToBeDeleted.size() > 0) {
 			FileUtils.deleteQuietly(filesToBeDeleted.remove(0));
 		}
+	}
+
+	@Test
+	public void expectZipPackageCreatedCorrectly() throws Exception {
+		File dir = unpackTestPackageToTempDir("repoA-v1.zip");
+		FarmConfig farmConfig = buildReader().readFarmConfig(dir, "1");
+
+		String mintOnlyZip = farmConfigPackager.preparePackage(farmConfig, dir.getAbsolutePath(), "mint183");
+
+		dir = createTempDir();
+		new ZipFile(mintOnlyZip).extractAll(dir.getAbsolutePath());
+		farmConfig = buildReader().readFarmConfig(dir, "1");
+
+		assertEquals(1, farmConfig.getAppDefs().size());
+		assertEquals("mint183", farmConfig.getAppDefs().values().iterator().next().getName());
+	}
+
+	@Test
+	public void expectZipPackageCreatedCorrectlyFor2Apps() throws Exception {
+		File dir = unpackTestPackageToTempDir("repoA-v1.zip");
+		FarmConfig farmConfig = buildReader().readFarmConfig(dir, "2");
+
+		String mintOnlyZip = farmConfigPackager.preparePackage(farmConfig, dir.getAbsolutePath(),
+				"mint183, maria-db-v10");
+
+		dir = createTempDir();
+		new ZipFile(mintOnlyZip).extractAll(dir.getAbsolutePath());
+		farmConfig = buildReader().readFarmConfig(dir, "2");
+
+		assertEquals(2, farmConfig.getAppDefs().size());
 	}
 
 	@Test
@@ -157,7 +191,7 @@ public class FarmConfigSmokeTest {
 	private void unpuckTestPackageToDir(String testPackageFileName, File tempDir) throws URISyntaxException {
 		URL resource = getClass().getClassLoader().getResource(testPackageFileName);
 		File zipFile = new File(resource.toURI());
-		zipUtils.unzip(zipFile, tempDir);
+		zipUtils.decompress(zipFile, tempDir);
 	}
 
 	private File createTempDir() {

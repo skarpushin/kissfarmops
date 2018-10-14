@@ -1,4 +1,4 @@
-package org.kissfarm.controller.config.api;
+package org.kissfarm.controller.config.dto;
 
 import java.util.Map;
 

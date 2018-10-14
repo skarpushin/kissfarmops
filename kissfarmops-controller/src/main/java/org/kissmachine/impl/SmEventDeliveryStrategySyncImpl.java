@@ -20,15 +20,16 @@ public class SmEventDeliveryStrategySyncImpl implements SmEventDeliveryStrategy 
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
 	public <T> CompletableFuture<SmTransitionToState> sendEvent(Message<T> message, StateMachine stateMachine) {
-		SmState currentState = stateMachine.getCurrentState();
-
-		try {
-			SmTransitionToState result = currentState.onMessage(message);
-			return CompletableFuture.completedFuture(result);
-		} catch (Throwable t) {
-			CompletableFuture<SmTransitionToState> ret = new CompletableFuture<>();
-			ret.completeExceptionally(t);
-			return ret;
+		synchronized (stateMachine) {
+			SmState currentState = stateMachine.getCurrentState();
+			try {
+				SmTransitionToState result = currentState.onMessage(message);
+				return CompletableFuture.completedFuture(result);
+			} catch (Throwable t) {
+				CompletableFuture<SmTransitionToState> ret = new CompletableFuture<>();
+				ret.completeExceptionally(t);
+				return ret;
+			}
 		}
 	}
 

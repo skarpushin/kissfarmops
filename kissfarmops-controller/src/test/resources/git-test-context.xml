@@ -34,7 +34,7 @@
 		</property>
 	</bean>
 
-	<bean id="gitConfig" class="org.kissfarm.controller.config.api.GitConfig">
+	<bean id="gitConfig" class="org.kissfarm.controller.config.dto.GitConfig">
 		<property name="user" value="${git.login}" />
 		<property name="password" value="${git.password}" />
 		<property name="branch" value="master" />

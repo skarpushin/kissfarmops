@@ -1,5 +1,7 @@
 package org.kissfarm.agent.client.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -43,6 +45,7 @@ import org.summerb.approaches.validation.ValidationErrors;
 import org.summerb.utils.exceptions.ExceptionUtils;
 import org.summerb.utils.exceptions.dto.GenericServerErrorResult;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -136,6 +139,55 @@ public class ControllerConnectionImpl implements ControllerConnection {
 		}
 	}
 
+	@Override
+	public void downloadFile(String relativeUrl, String targetFile) {
+		try {
+			prepareTargetFile(targetFile);
+			doFileDownload(baseUrl() + relativeUrl, null, cookieStore, targetFile);
+		} catch (Throwable e) {
+			throw new RuntimeException("Failed to download file from '" + relativeUrl + "' to '" + targetFile + "'", e);
+		}
+	}
+
+	private void doFileDownload(String url, List<NameValuePair> optionalHeaders, CookieStore cookieStore,
+			String saveLocallyTo) throws NotAuthorizedException {
+		try {
+			log.info("Downloading file from " + url + " to local " + saveLocallyTo);
+
+			HttpGet httpGet = new HttpGet(url);
+
+			if (url.toLowerCase().startsWith(baseUrl().toLowerCase())) {
+				addHeaders(httpGet, commonHeaders);
+				if (optionalHeaders != null) {
+					addHeaders(httpGet, optionalHeaders);
+				}
+			}
+
+			CloseableHttpClient httpClient = buildHttpClient(cookieStore);
+			HttpResponse response = httpClient.execute(httpGet);
+			int statusCode = response.getStatusLine().getStatusCode();
+			Preconditions.checkArgument(statusCode == 200, "Unexpected status code %d", statusCode);
+
+			HttpEntity entity = response.getEntity();
+			try (FileOutputStream fos = new FileOutputStream(saveLocallyTo)) {
+				entity.writeTo(fos);
+			}
+			EntityUtils.consume(entity);
+		} catch (Throwable e) {
+			throw new RuntimeException("Download failed", e);
+		}
+	}
+
+	private void prepareTargetFile(String filePathname) {
+		File targetFile = new File(filePathname);
+		if (!targetFile.getParentFile().exists() && !targetFile.getParentFile().mkdirs()) {
+			throw new RuntimeException("Failed to ensure parent dirs for target file: " + filePathname);
+		}
+		if (targetFile.exists() && !targetFile.delete()) {
+			throw new RuntimeException("Failed to delete target file: " + filePathname);
+		}
+	}
+
 	private <TResponse> TResponse doGet(String relativeUrl, List<NameValuePair> optionalHeaders,
 			CookieStore cookieStore, Class<TResponse> clazz) {
 		try {
@@ -187,10 +239,7 @@ public class ControllerConnectionImpl implements ControllerConnection {
 			}
 
 			// FYI: http://www.baeldung.com/httpclient-timeout
-			RequestConfig config = RequestConfig.custom().setConnectTimeout(socketTimeoutMs)
-					.setConnectionRequestTimeout(socketTimeoutMs).setSocketTimeout(socketTimeoutMs).build();
-			CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore)
-					.setDefaultRequestConfig(config).evictExpiredConnections().build();
+			CloseableHttpClient httpClient = buildHttpClient(cookieStore);
 
 			HttpResponse response = httpClient.execute(httpRequest);
 			int statusCode = response.getStatusLine().getStatusCode();
@@ -219,6 +268,14 @@ public class ControllerConnectionImpl implements ControllerConnection {
 			}
 			throw new RuntimeException("Failed to execute request", e);
 		}
+	}
+
+	private CloseableHttpClient buildHttpClient(CookieStore cookieStore) {
+		RequestConfig config = RequestConfig.custom().setConnectTimeout(socketTimeoutMs)
+				.setConnectionRequestTimeout(socketTimeoutMs).setSocketTimeout(socketTimeoutMs).build();
+		CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore)
+				.setDefaultRequestConfig(config).evictExpiredConnections().build();
+		return httpClient;
 	}
 
 	protected void throwAppropriateExcBasedOnResponseIfAny(HttpResponse response, int statusCode, String result)

@@ -44,7 +44,7 @@ public class SelfIdentificationActionBasedImpl extends SelfIdentificationAbstrac
 		try {
 			IdentiyResolverListener listener = new IdentiyResolverListener();
 			actionExecutionFactory.startNewInvocation(build(), listener);
-			// TODO: We'd better keep trying, don't just stuck or die completely
+			// TBD: We'd better keep trying, don't just stuck or die completely
 			String idenityStr = listener.future.join();
 			NodeIdentity ret = gson.fromJson(idenityStr, NodeIdentity.class);
 			fillEmptyFieldsIfAny(ret);

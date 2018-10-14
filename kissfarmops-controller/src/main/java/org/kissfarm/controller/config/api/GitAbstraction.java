@@ -1,5 +1,9 @@
 package org.kissfarm.controller.config.api;
 
+import org.kissfarm.controller.config.dto.GitConfig;
+import org.kissfarm.controller.config.errors.RemoteConfigRepoNotAvailableException;
+import org.kissfarm.controller.config.errors.RemoteConfigRepoNotConfiguredException;
+
 /**
  * Simple abstraction layer for GIT operations. Super simple interface that will
  * simplify/abstract GIT usage

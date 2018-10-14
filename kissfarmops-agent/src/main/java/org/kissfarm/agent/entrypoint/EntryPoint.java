@@ -41,7 +41,7 @@ public class EntryPoint {
 			} catch (Throwable t) {
 				log.error("Fatal error during lifecycle execution: " + curLifecycle + ". Agent will now die", t);
 				break;
-				// TODO: Maybe we'd better restart instead of die?
+				// THINK: Maybe we'd better restart instead of die?
 				// Maybe we can register agent as a service which will be automatically
 				// restarted when died
 			}

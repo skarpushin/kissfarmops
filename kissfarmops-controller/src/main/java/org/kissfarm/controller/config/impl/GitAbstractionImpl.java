@@ -16,9 +16,9 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.kissfarm.controller.config.api.GitAbstraction;
-import org.kissfarm.controller.config.api.GitConfig;
-import org.kissfarm.controller.config.api.RemoteConfigRepoNotAvailableException;
-import org.kissfarm.controller.config.api.RemoteConfigRepoNotConfiguredException;
+import org.kissfarm.controller.config.dto.GitConfig;
+import org.kissfarm.controller.config.errors.RemoteConfigRepoNotAvailableException;
+import org.kissfarm.controller.config.errors.RemoteConfigRepoNotConfiguredException;
 import org.kissfarm.shared.tools.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
  * NOTE: JGit cookbook: https://github.com/centic9/jgit-cookbook
  */
 public class GitAbstractionImpl implements GitAbstraction {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private static Logger log = LoggerFactory.getLogger(GitAbstractionImpl.class);
 
 	private int hashSize = 7;
 
@@ -173,7 +173,7 @@ public class GitAbstractionImpl implements GitAbstraction {
 				new UsernamePasswordCredentialsProvider(connectionInfo.getUser(), connectionInfo.getPassword()));
 	}
 
-	private boolean isCanWriteToFolder(File localRepo) {
+	public static boolean isCanWriteToFolder(File localRepo) {
 		try {
 			File testFile = new File(localRepo.getAbsolutePath() + File.separator + "test");
 			if (testFile.exists()) {

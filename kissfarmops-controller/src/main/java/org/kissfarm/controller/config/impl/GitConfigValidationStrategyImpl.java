@@ -1,7 +1,8 @@
 package org.kissfarm.controller.config.impl;
 
 import org.kissfarm.controller.config.api.GitAbstraction;
-import org.kissfarm.controller.config.api.GitConfig;
+import org.kissfarm.controller.config.dto.GitConfig;
+import org.kissfarm.controller.config.errors.GitConfigValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

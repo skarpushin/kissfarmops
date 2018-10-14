@@ -3,6 +3,7 @@ package org.kissfarm.controller.services.nodes.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kissfarm.controller.security.SecurityConstantsEx;
 import org.kissfarm.controller.services.nodes.api.NodeTag;
 import org.kissfarm.controller.services.nodes.api.NodeTagAuthStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,8 @@ public class NodeTagAuthStrategyImpl implements NodeTagAuthStrategy {
 
 	@Override
 	public void assertAuthorizedToRead(NodeTag dto) throws NotAuthorizedException {
-		assertUserRole("action.read", "NodeTag:" + getEntityName(dto), SecurityConstants.ROLE_USER);
+		assertUserRole("action.read", "NodeTag:" + getEntityName(dto), SecurityConstants.ROLE_USER,
+				SecurityConstantsEx.ROLE_NODE);
 	}
 
 	@Override

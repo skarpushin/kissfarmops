@@ -36,7 +36,7 @@ public class WsConnectLifecycle extends LifecycleSyncBase implements StompSessio
 	@Autowired
 	private RegistrationLifecycle registrationLifecycle;
 	@Autowired
-	private InitialConfigLifecycle initialConfigLifecycle;
+	private InitConfigLifecycle initConfigLifecycle;
 
 	private TaskScheduler taskScheduler = new ConcurrentTaskScheduler();
 	private WebSocketStompClient stompClient;
@@ -68,7 +68,7 @@ public class WsConnectLifecycle extends LifecycleSyncBase implements StompSessio
 			Preconditions.checkState(newSession.isConnected(),
 					"Got StompSession from stompClient but it's not connected");
 			session.setStompSession(newSession);
-			return initialConfigLifecycle;
+			return initConfigLifecycle;
 		} catch (InterruptedException ie) {
 			log.debug("had InterruptedException, going to exit agent", ie);
 			return null;

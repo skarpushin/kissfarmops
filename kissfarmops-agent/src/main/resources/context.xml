@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
@@ -35,7 +36,8 @@
 
 	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool" destroy-method="shutdownNow" />
 
-	<bean id="scheduledExecutorService" class="java.util.concurrent.Executors" factory-method="newScheduledThreadPool" destroy-method="shutdownNow">
+	<bean id="scheduledExecutorService" class="java.util.concurrent.Executors" factory-method="newScheduledThreadPool"
+		destroy-method="shutdownNow">
 		<constructor-arg value="4" />
 	</bean>
 
@@ -52,8 +54,10 @@
 
 	<bean class="org.kissfarm.agent.lifecycle.WsConnectLifecycle" />
 
-	<bean class="org.kissfarm.agent.lifecycle.InitialConfigLifecycle" />
-	
+	<bean class="org.kissfarm.shared.impl.CompressorTarGzImpl" />
+	<bean class="org.kissfarm.agent.lifecycle.InitConfigLifecycle" p:packageLocation="${InitialConfigLifecycle.packageLocation}"
+		p:farmConfigStateFile="${FarmConfigState.filename}" />
+
 	<bean class="org.kissfarm.agent.lifecycle.NormalLifecycle" />
 
 	<import resource="file:**context-devmode.xml" />

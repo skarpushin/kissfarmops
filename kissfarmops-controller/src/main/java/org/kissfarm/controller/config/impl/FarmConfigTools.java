@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.kissfarm.controller.config.api.FarmConfig;
+import org.kissfarm.controller.config.dto.FarmConfig;
 import org.kissfarm.shared.config.dto.ActionConfig;
 import org.kissfarm.shared.config.dto.AppDefConfig;
 import org.springframework.util.ObjectUtils;
@@ -58,6 +58,6 @@ public final class FarmConfigTools {
 			});
 		});
 
-		// TODO: Reject new config if it will result in nodes with zero applications
+		// TBD: Reject new config if it will result in nodes with zero applications
 	}
 }

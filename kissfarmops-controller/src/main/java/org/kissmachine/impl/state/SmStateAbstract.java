@@ -110,10 +110,15 @@ public abstract class SmStateAbstract<P extends Serializable, S extends Serializ
 				.findFirst().orElse(null);
 		if (handler == null) {
 			log.warn("{} wont handle message {}", this, event.getPayload());
-			return null;
+			return handleDeadLetter(event);
 		}
 
 		return handler.apply(event);
+	}
+
+	protected <T> SmTransitionToState handleDeadLetter(Message<T> event) {
+		// Subclass might want to impl that
+		return null;
 	}
 
 	@Override
@@ -156,8 +161,6 @@ public abstract class SmStateAbstract<P extends Serializable, S extends Serializ
 
 	/**
 	 * Convenience shortcut/method to get machine-wide variables
-	 * 
-	 * @return
 	 */
 	protected M vars() {
 		@SuppressWarnings("unchecked")
