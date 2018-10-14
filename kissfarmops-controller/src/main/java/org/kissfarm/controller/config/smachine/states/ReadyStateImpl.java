@@ -163,6 +163,8 @@ public class ReadyStateImpl extends FarmConfigStateAbstract<GitConfig, Void2, Vo
 				return null;
 			}
 
+			// TODO: Update app instance and related rows in DB to reflect
+			
 			dto.setVersion(payload.getVersion());
 			nodeStatusService.update(dto);
 		} catch (Throwable t) {
