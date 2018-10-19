@@ -193,6 +193,11 @@ public class ReadyStateImpl extends FarmConfigStateAbstract<GitConfig, Void2, Vo
 					.query(PagerParams.ALL, Query.n().eq(AppInstanceRow.FN_NODE_ID, payload.getNodeId())).getItems();
 			removeOutdatedAppsFromDb(appDefs, oldApps);
 			addNewAppsToDb(payload.getNodeId(), appDefs, oldApps);
+
+			// NOTE: I could've attached app instances to config version and in that case I
+			// wouldn't have to delete apps that are no longer mentioned in FarmConfig. BUT
+			// in that case I'd have to migrate retained applications somehow to the new
+			// version. Sounds a bit complicated, thence decided to leave logic as is
 		} catch (Throwable t) {
 			log.warn("Failed to process NodeNowUsesConfigReport: " + payload, t);
 		}

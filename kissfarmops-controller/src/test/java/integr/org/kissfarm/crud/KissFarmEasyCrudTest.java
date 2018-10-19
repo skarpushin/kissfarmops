@@ -47,7 +47,8 @@ public class KissFarmEasyCrudTest {
 		statusSchema.put("status1", "String");
 		statusSchema.put("status2", "Integer");
 		n.setStatusSchema(statusSchema);
-		n = appInstanceService.create(n);
+		appInstanceService.create(n);
+		n = appInstanceService.findById(n.getId());
 		assertNotNull(n);
 		assertNotNull(n.getStatusSchema());
 		assertEquals(2, n.getStatusSchema().size());

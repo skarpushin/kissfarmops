@@ -16,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 public class SmEventDeliveryStrategySyncImpl implements SmEventDeliveryStrategy {
-
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
 	public <T> CompletableFuture<SmTransitionToState> sendEvent(Message<T> message, StateMachine stateMachine) {
-		synchronized (stateMachine) {
+		synchronized (stateMachine.getMachineType()) {
 			SmState currentState = stateMachine.getCurrentState();
 			try {
 				SmTransitionToState result = currentState.onMessage(message);
@@ -32,5 +31,4 @@ public class SmEventDeliveryStrategySyncImpl implements SmEventDeliveryStrategy 
 			}
 		}
 	}
-
 }
