@@ -22,7 +22,7 @@
 		<spring.security.version>5.0.4.RELEASE</spring.security.version>
 		<spring.integration.version>5.0.4.RELEASE</spring.integration.version>
 		
-		<summerb.version>2.6.2</summerb.version>
+		<summerb.version>2.6.3</summerb.version>
 	</properties>
 
 	<developers>
