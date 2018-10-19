@@ -75,6 +75,7 @@ CREATE TABLE `app_instance` (
   `name` VARCHAR(64) NOT NULL,
   `prototype` VARCHAR(64) NOT NULL,
   `status` MEDIUMTEXT NULL,
+  `status_schema` MEDIUMTEXT NULL,
   
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),

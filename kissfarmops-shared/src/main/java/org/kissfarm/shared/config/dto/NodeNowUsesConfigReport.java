@@ -38,4 +38,9 @@ public class NodeNowUsesConfigReport implements DtoBase {
 	public void setVersion(String version) {
 		this.version = version;
 	}
+
+	@Override
+	public String toString() {
+		return "NodeNowUsesConfigReport [nodeId=" + nodeId + ", version=" + version + "]";
+	}
 }

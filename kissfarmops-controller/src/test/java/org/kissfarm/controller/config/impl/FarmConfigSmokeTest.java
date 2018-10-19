@@ -28,10 +28,12 @@ import net.lingala.zip4j.core.ZipFile;
 public class FarmConfigSmokeTest {
 	private List<File> filesToBeDeleted = new LinkedList<>();
 	private Compressor zipUtils = new CompressorZipImpl();
-	private FarmConfigPackager farmConfigPackager = new FarmConfigPackagerImpl(createTempDir().getAbsolutePath());
+	private FarmConfigPackager farmConfigPackager;
 
 	@Before
 	public void beforeEachTest() {
+		farmConfigPackager = new FarmConfigPackagerImpl(createTempDir().getAbsolutePath());
+		((FarmConfigPackagerImpl) farmConfigPackager).setCompressor(new CompressorZipImpl());
 	}
 
 	@After

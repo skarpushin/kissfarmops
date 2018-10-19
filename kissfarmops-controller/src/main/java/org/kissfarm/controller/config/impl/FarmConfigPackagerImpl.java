@@ -61,7 +61,7 @@ public class FarmConfigPackagerImpl implements FarmConfigPackager {
 
 		String tagsStr = Arrays.toString(tags.toArray());
 		log.debug("Creating package for tags: {}", tagsStr);
-		Set<AppDefConfig> appDefs = findAppDefConfigByTags(tags, farmConfig);
+		Set<AppDefConfig> appDefs = FarmConfigTools.findAppDefConfigByTags(tags, farmConfig);
 		Preconditions.checkArgument(!appDefs.contains(null), "Failed to resolve tags-to-app mapping: " + tagsStr);
 
 		Set<File> packageContents = appDefs.stream()
@@ -114,14 +114,6 @@ public class FarmConfigPackagerImpl implements FarmConfigPackager {
 		crc.update(tagsStrSorted.getBytes(Charset.forName("UTF-8")));
 		String checksum = tagsStrSorted.length() + "_" + crc.getValue();
 		return checksum;
-	}
-
-	private Set<AppDefConfig> findAppDefConfigByTags(Set<String> tags, FarmConfig farmConfig) {
-		return tags.stream().map(x -> {
-			String appName = farmConfig.getTagsToAppsMapping().get(x);
-			Preconditions.checkArgument(appName != null, "Tag %s wasn't found in tags-to-apps mapping", x);
-			return appName;
-		}).map(x -> farmConfig.getAppDefs().get(x)).collect(Collectors.toSet());
 	}
 
 	public TagParser getTagParser() {

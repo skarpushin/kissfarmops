@@ -19,11 +19,7 @@ public class AppDefConfig implements Serializable {
 	private EnvVars env;
 	private Map<String, ActionConfig> actions;
 	private Map<String, AppProtoConfig> prototypes;
-
-	/**
-	 * status field name -> field type (i.e. "String")
-	 */
-	private Map<String, String> statusSchema;
+	private StatusSchema statusSchema;
 
 	public String getName() {
 		return name;
@@ -65,11 +61,11 @@ public class AppDefConfig implements Serializable {
 		this.prototypes = prototypes;
 	}
 
-	public Map<String, String> getStatusSchema() {
+	public StatusSchema getStatusSchema() {
 		return statusSchema;
 	}
 
-	public void setStatusSchema(Map<String, String> statusSchema) {
+	public void setStatusSchema(StatusSchema statusSchema) {
 		this.statusSchema = statusSchema;
 	}
 }
