@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/util 
+	    http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/cache 
+		http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" p:ignoreResourceNotFound="true"
+		p:ignoreUnresolvablePlaceholders="true">
+		<property name="locations">
+			<list>
+				<!-- Default configuration values -->
+				<value>classpath:test-dbconnection.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<context:annotation-config />
+
+	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool" destroy-method="shutdownNow" />
+	<bean id="securityContextResolver" class="integr.org.statemachine.SecurityContextResolverTestImpl" />
+	<bean id="entityChangesEventBus" class="com.google.common.eventbus.EventBus" />
+	<bean class="org.kissmachine.impl.easycrud.JdbcJsonFieldSerializerImpl" />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource" p:driverClass="${jdbc.driverClassName}"
+		p:username="${jdbc.username}" p:password="${jdbc.password}" p:url="${jdbc.databaseurl}" />
+
+	<bean class="org.summerb.approaches.jdbccrud.impl.EasyCrudServiceResolverSpringImpl" />
+	<bean class="org.summerb.approaches.jdbccrud.impl.relations.DataSetLoaderImpl" />
+	<bean class="org.summerb.approaches.jdbccrud.scaffold.impl.EasyCrudScaffoldImpl" />
+	<bean class="org.kissfarm.controller.services.Refs" />
+
+	<bean class="integr.org.kissfarm.crud.KissfarmConfigForTests" />
+
+</beans>
+
+

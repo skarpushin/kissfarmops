@@ -2,6 +2,7 @@ package org.kissfarm.controller.config.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.kissfarm.controller.config.dto.FarmConfig;
@@ -59,5 +60,13 @@ public final class FarmConfigTools {
 		});
 
 		// TBD: Reject new config if it will result in nodes with zero applications
+	}
+
+	public static Set<AppDefConfig> findAppDefConfigByTags(Set<String> tags, FarmConfig farmConfig) {
+		return tags.stream().map(x -> {
+			String appName = farmConfig.getTagsToAppsMapping().get(x);
+			Preconditions.checkArgument(appName != null, "Tag %s wasn't found in tags-to-apps mapping", x);
+			return appName;
+		}).map(x -> farmConfig.getAppDefs().get(x)).collect(Collectors.toSet());
 	}
 }

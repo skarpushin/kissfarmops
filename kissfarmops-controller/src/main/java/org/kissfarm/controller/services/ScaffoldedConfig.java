@@ -1,9 +1,13 @@
 package org.kissfarm.controller.services;
 
+import org.kissfarm.controller.security.impl.AuthenticatedUsersTableAuthStrategy;
+import org.kissfarm.controller.security.impl.AuthenticatedUsersTableAuthStrategyImpl;
 import org.kissfarm.controller.services.agent_auth_token.api.AgentAuthTokenService;
 import org.kissfarm.controller.services.agent_auth_token.impl.AgentAuthTokenAuthStrategy;
 import org.kissfarm.controller.services.agent_auth_token.impl.AgentAuthTokenAuthStrategyImpl;
 import org.kissfarm.controller.services.agent_auth_token.impl.AgentAuthTokenValidationStrategyImpl;
+import org.kissfarm.controller.services.app_instance.api.ActionStatusService;
+import org.kissfarm.controller.services.app_instance.api.AppInstanceService;
 import org.kissfarm.controller.services.nodes.api.Node;
 import org.kissfarm.controller.services.nodes.api.NodeAuthStrategy;
 import org.kissfarm.controller.services.nodes.api.NodeService;
@@ -37,10 +41,15 @@ public class ScaffoldedConfig {
 	}
 
 	@Bean
+	public EasyCrudWireTap<?, ?> wireTapEventBusForwarder() {
+		return new EasyCrudWireTapEventBusImpl<>(entityChangesEventBus);
+	}
+
+	@Bean
 	public AgentAuthTokenService agentAuthTokenService() {
 		return easyCrudScaffold.fromService(AgentAuthTokenService.class, AgentAuthTokenService.TERM,
 				"agent_auth_tokens", new AgentAuthTokenValidationStrategyImpl(), agentAuthTokenAuthStrategy(),
-				new EasyCrudWireTapEventBusImpl<>(entityChangesEventBus));
+				wireTapEventBusForwarder());
 	}
 
 	@Bean
@@ -67,13 +76,30 @@ public class ScaffoldedConfig {
 	public NodeService nodeService() {
 		return easyCrudScaffold.fromService(NodeService.class, NodeService.TERM, "nodes", nodeExceptionStrategy(),
 				nodeValidationStrategyImpl(), nodeAuthStrategy(), nodeToUserReplicationWireTap(),
-				new EasyCrudWireTapEventBusImpl<>(entityChangesEventBus));
+				wireTapEventBusForwarder());
 	}
 
 	@Bean
 	public NodeStatusService nodeNodeStatusService() {
 		return easyCrudScaffold.fromService(NodeStatusService.class, NodeStatusService.TERM, "node_status",
-				new NodeStatusOnlinePatchWireTap(), new EasyCrudWireTapEventBusImpl<>(entityChangesEventBus));
+				new NodeStatusOnlinePatchWireTap(), wireTapEventBusForwarder());
+	}
+
+	@Bean
+	public AuthenticatedUsersTableAuthStrategy authenticatedUsersTableAuthStrategy() {
+		return new AuthenticatedUsersTableAuthStrategyImpl();
+	}
+
+	@Bean
+	public AppInstanceService appInstanceService() {
+		return easyCrudScaffold.fromService(AppInstanceService.class, AppInstanceService.TERM, "app_instance",
+				authenticatedUsersTableAuthStrategy(), wireTapEventBusForwarder());
+	}
+
+	@Bean
+	public ActionStatusService actionStatusService() {
+		return easyCrudScaffold.fromService(ActionStatusService.class, ActionStatusService.TERM, "action_status",
+				authenticatedUsersTableAuthStrategy(), wireTapEventBusForwarder());
 	}
 
 }

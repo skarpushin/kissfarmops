@@ -65,3 +65,42 @@ CREATE TABLE `node_status` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+
+CREATE TABLE `app_instance` (
+  `id` VARCHAR(36) NOT NULL ,
+  `created_at` BIGINT NOT NULL ,
+  `modified_at` BIGINT NOT NULL ,
+  `node_id` VARCHAR(36) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `prototype` VARCHAR(64) NOT NULL,
+  `status` MEDIUMTEXT NULL,
+  `status_schema` MEDIUMTEXT NULL,
+  
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  
+  INDEX `app_instance_IDX_nodes` USING BTREE (`node_id` ASC),
+  CONSTRAINT `app_instance_FK_nodes` FOREIGN KEY (`node_id` ) REFERENCES `nodes` (`id` ) ON DELETE CASCADE ON UPDATE CASCADE  
+  
+) ENGINE = InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE `action_status` (
+  `id` VARCHAR(36) NOT NULL ,
+  `created_at` BIGINT NOT NULL ,
+  `modified_at` BIGINT NOT NULL ,
+  `app_id` VARCHAR(36) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `correlation_id` VARCHAR(36) NULL,
+  `params` MEDIUMTEXT NULL,
+  `result` MEDIUMTEXT NULL,
+  
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  
+  INDEX `action_status_IDX_correlation` USING BTREE (`correlation_id` ASC),
+  INDEX `action_status_IDX_app` USING BTREE (`app_id` ASC),
+  CONSTRAINT `action_status_FK_app` FOREIGN KEY (`app_id` ) REFERENCES `app_instance` (`id` ) ON DELETE CASCADE ON UPDATE CASCADE  
+  
+) ENGINE = InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+

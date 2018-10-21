@@ -97,7 +97,7 @@ public abstract class SmStateAbstract<P extends Serializable, S extends Serializ
 	 * Convenience method for subclass to register handle for specific payload type
 	 * 
 	 * @param clazz   expected class of message's payload
-	 * @param handler the handler for that message payload type
+	 * @param handler the handler for that message payload type.
 	 */
 	protected <T> void handleByPayload(Class<T> clazz, Function<Message<T>, SmTransitionToState> handler) {
 		handlers.add(new StateMessageHandlerImpl<T>(clazz, handler));
@@ -113,7 +113,12 @@ public abstract class SmStateAbstract<P extends Serializable, S extends Serializ
 			return handleDeadLetter(event);
 		}
 
-		return handler.apply(event);
+		try {
+			return handler.apply(event);
+		} catch (Throwable t) {
+			log.error("Failed to handle event " + event + " using handler " + handler, t);
+			return null;
+		}
 	}
 
 	protected <T> SmTransitionToState handleDeadLetter(Message<T> event) {
